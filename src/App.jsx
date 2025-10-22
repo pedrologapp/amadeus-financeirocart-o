@@ -223,7 +223,7 @@ function App() {
           installments: formData.installments,
           amount: valorTotal,
           timestamp: new Date().toISOString(),
-          event: 'Amadeus-Desfile7setembro'
+          event: 'Amadeus-gerarcobranca'
         })
       });
 
@@ -824,6 +824,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

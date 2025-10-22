@@ -30,7 +30,9 @@ import {
   Check 
 } from 'lucide-react';
 // Importando as imagens
-
+import interiorImage1 from './assets/desfie1.jpg';
+import interiorImage2 from './assets/desfile2.jpg';
+import jardimImage from './assets/desfile3.jpg';
 
 function App() {
   // Estados para o formulário
@@ -98,13 +100,26 @@ function App() {
     }, 100);
   };
 
+  // Função para formatar valor em Real Brasileiro
+  const formatCurrency = (value) => {
+    if (!value) return 'R$ 0,00';
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(numValue)) return 'R$ 0,00';
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(numValue);
+  };
+
   // Cálculo de preço atualizado
   const calculatePrice = () => {
-    const PRECO_BASE = 20.0;
+    // Usa o valor digitado pelo usuário como base
+    const valorBase = parseFloat(formData.paymentAmount) || 0;
     
-    let valorTotal = PRECO_BASE;
+    let valorTotal = valorBase;
     
-    if (formData.paymentMethod === 'credit') {
+    // Aplica juros apenas se: Com Juros = true E Cartão de Crédito
+    if (formData.hasInterest === true && formData.paymentMethod === 'credit') {
       let taxaPercentual = 0;
       const taxaFixa = 0.49;
       const parcelas = parseInt(formData.installments) || 1;
@@ -121,10 +136,10 @@ function App() {
     }
     
     const valorParcela = valorTotal / (parseInt(formData.installments) || 1);
-    return { valorTotal, valorParcela };
+    return { valorTotal, valorParcela, valorBase };
   };
 
-  const { valorTotal, valorParcela } = calculatePrice();
+  const { valorTotal, valorParcela, valorBase } = calculatePrice();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -337,6 +352,9 @@ function App() {
           </div>
           <div className="flex justify-center">
             <div className="grid grid-cols-2 gap-4 max-w-2xl">
+              <img src={interiorImage1} alt="Interior do Instituto" className="rounded-lg shadow-lg h-48 w-full object-cover" />
+              <img src={interiorImage2} alt="Coleções do Instituto" className="rounded-lg shadow-lg h-48 w-full object-cover" />
+              <img src={jardimImage} alt="Jardins do Instituto" className="rounded-lg shadow-lg col-span-2 h-64 w-full object-cover" />
             </div>
           </div>
         </div>
@@ -757,7 +775,7 @@ function App() {
                           onClick={() => setFormData(prev => ({ ...prev, hasInterest: false }))}
                         >
                           <div className="flex items-center">
-                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
                               formData.hasInterest === false ? 'border-green-400 bg-green-400' : 'border-gray-300'
                             }`}>
                               {formData.hasInterest === false && (
@@ -766,7 +784,7 @@ function App() {
                             </div>
                             <div>
                               <span className="font-medium">Sem Juros</span>
-                              <p className="text-xs text-gray-600">Pagamento sem acréscimos</p>
+                              <p className="text-xs text-gray-600">Você paga exatamente o valor digitado</p>
                             </div>
                           </div>
                         </div>
@@ -777,10 +795,10 @@ function App() {
                               ? 'border-orange-400 bg-orange-50' 
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
-                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: true }))}
+                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: true })}}
                         >
                           <div className="flex items-center">
-                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
                               formData.hasInterest === true ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
                             }`}>
                               {formData.hasInterest === true && (
@@ -789,11 +807,14 @@ function App() {
                             </div>
                             <div>
                               <span className="font-medium">Com Juros</span>
-                              <p className="text-xs text-gray-600">Pagamento parcelado com acréscimos</p>
+                              <p className="text-xs text-gray-600">Taxas aplicadas no cartão de crédito (2,99% a 3,99% + R$ 0,49)</p>
                             </div>
                           </div>
                         </div>
                       </div>
+                      <p className="text-xs text-gray-500 mt-2 italic">
+                        ℹ️ Os juros são aplicados apenas em pagamentos com cartão de crédito quando "Com Juros" está selecionado
+                      </p>
                     </div>
 
                     {/* MÉTODO DE PAGAMENTO */}
@@ -806,20 +827,25 @@ function App() {
                               ? 'border-orange-400 bg-orange-50' 
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
-                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1 }))}
+                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1, hasInterest: false }))}
                         >
-                          <div className="flex items-center">
-                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                              formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                            }`}>
-                              {formData.paymentMethod === 'pix' && (
-                                <div className="w-full h-full rounded-full bg-orange-400"></div>
-                              )}
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center">
+                              <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                                formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                              }`}>
+                                {formData.paymentMethod === 'pix' && (
+                                  <div className="w-full h-full rounded-full bg-orange-400"></div>
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-lg font-bold">PIX</span>
+                                <span className="text-sm text-gray-600">(pagamento à vista)</span>
+                              </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-lg font-bold">PIX</span>
-                              <span className="text-sm text-gray-600">(pagamento à vista)</span>
-                            </div>
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
+                              Sem juros
+                            </span>
                           </div>
                         </div>
 
@@ -862,10 +888,10 @@ function App() {
                           onChange={(e) => setFormData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
                           className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
                         >
-                          <option value={1}>1x de R$ {(parseFloat(formData.paymentAmount) / 1).toFixed(2).replace('.', ',')}</option>          
-                          <option value={2}>2x de R$ {(parseFloat(formData.paymentAmount) / 2).toFixed(2).replace('.', ',')}</option>					        
-                          <option value={3}>3x de R$ {(parseFloat(formData.paymentAmount) / 3).toFixed(2).replace('.', ',')}</option>						        
-                          <option value={4}>4x de R$ {(parseFloat(formData.paymentAmount) / 4).toFixed(2).replace('.', ',')}</option>
+                          <option value={1}>1x de {formatCurrency(valorTotal / 1)}</option>          
+                          <option value={2}>2x de {formatCurrency(valorTotal / 2)}</option>					        
+                          <option value={3}>3x de {formatCurrency(valorTotal / 3)}</option>						        
+                          <option value={4}>4x de {formatCurrency(valorTotal / 4)}</option>
                         </select>
                       </div>
                     )}
@@ -875,17 +901,37 @@ function App() {
                       <div className="bg-orange-100 p-4 rounded-lg border border-orange-200">
                         <div className="text-center">
                           <h4 className="text-lg font-bold text-orange-800 mb-1">Resumo do Pagamento</h4>
-                          <div className="text-2xl font-bold text-orange-900">
-                            R$ {parseFloat(formData.paymentAmount).toFixed(2).replace('.', ',')}
-                          </div>
-                          {formData.paymentMethod === 'credit' && formData.installments > 1 && (
-                            <div className="text-sm text-orange-700 mt-1">
-                              {formData.installments}x de R$ {(parseFloat(formData.paymentAmount) / formData.installments).toFixed(2).replace('.', ',')}
+                          
+                          {/* Valor Base */}
+                          {valorBase > 0 && valorTotal !== valorBase && (
+                            <div className="text-sm text-gray-600 line-through">
+                              Valor base: {formatCurrency(valorBase)}
                             </div>
                           )}
+                          
+                          {/* Valor Total */}
+                          <div className="text-2xl font-bold text-orange-900">
+                            {formatCurrency(valorTotal)}
+                          </div>
+                          
+                          {/* Parcelas */}
+                          {formData.paymentMethod === 'credit' && formData.installments > 1 && (
+                            <div className="text-sm text-orange-700 mt-1">
+                              {formData.installments}x de {formatCurrency(valorParcela)}
+                            </div>
+                          )}
+                          
+                          {/* Status de Juros */}
                           <div className="text-xs text-orange-600 mt-2">
                             {formData.hasInterest === false ? '✓ Sem juros' : '⚠ Com juros'}
                           </div>
+                          
+                          {/* Mostrar valor adicional de juros se aplicável */}
+                          {valorTotal > valorBase && valorBase > 0 && (
+                            <div className="text-xs text-orange-700 mt-1">
+                              (+{formatCurrency(valorTotal - valorBase)} de taxas)
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
@@ -975,6 +1021,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

@@ -27,14 +27,12 @@ import {
   Plus,
   Minus,
   UserPlus,
-  Utensils,
-  XCircle,      // <- Adicione este
-  AlertTriangle
+  Check 
 } from 'lucide-react';
 // Importando as imagens
-import interiorImage1 from './assets/happy1.jpg';
-import interiorImage2 from './assets/happy2.jpg';
-import jardimImage from './assets/happy3.jpg';
+import interiorImage1 from './assets/desfie1.jpg';
+import interiorImage2 from './assets/desfile2.jpg';
+import jardimImage from './assets/desfile3.jpg';
 
 function App() {
   // Estados para o formulário
@@ -43,6 +41,9 @@ function App() {
     studentName: '',
     studentGrade: '',
     studentClass: '',
+	category: '',           // Categoria: livros, material ou outros
+  	paymentAmount: '',      // Valor do pagamento
+  	hasInterest: false,     // Com ou sem juros
     parentName: '',
     cpf: '',
     email: '',
@@ -101,7 +102,7 @@ function App() {
 
   // Cálculo de preço atualizado
   const calculatePrice = () => {
-    const PRECO_BASE = 280.0;
+    const PRECO_BASE = 20.0;
     
     let valorTotal = PRECO_BASE;
     
@@ -201,15 +202,18 @@ function App() {
           studentName: formData.studentName,
           studentGrade: formData.studentGrade,
           studentClass: formData.studentClass,
+		  category: formData.category,
           parentName: formData.parentName,
           cpf: formData.cpf,
           email: formData.email,
           phone: formData.phone,
+		  paymentAmount: formData.paymentAmount,    // ⭐ ADICIONE
+  		  hasInterest: formData.hasInterest,
           paymentMethod: formData.paymentMethod,
           installments: formData.installments,
           amount: valorTotal,
           timestamp: new Date().toISOString(),
-          event: 'Amadeus-venezapark'
+          event: 'Amadeus-Desfile7setembro'
         })
       });
 
@@ -296,10 +300,10 @@ function App() {
       <section className="hero-section min-h-screen flex items-center justify-center text-white relative">
         <div className="text-center z-10 max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            Veneza Water Park
+            Desfile de 7 de Setembro
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90">
-            Em comemoração ao Dia da Criança, realizaremos um passeio especial para o Veneza Park Aquático!
+            É com grande alegria que convidamos toda a nossa comunidade escolar a participar do tradicional Desfile Cívico em comemoração à independência do Brasil.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -314,11 +318,11 @@ function App() {
           <div className="mt-12 flex justify-center items-center space-x-8 text-sm">
             <div className="flex items-center">
               <Calendar className="h-5 w-5 mr-2" />
-              18 de Outubro de 2025 - dia todo.
+              14 de Setembro de 2025 - a partir das 13h
             </div>
             <div className="flex items-center">
               <MapPin className="h-5 w-5 mr-2" />
-              Veneza Water Park, Pernambuco.
+              Percurso: Rua Arari até Av. Maranhão - São Gonçalo do Amarante - RN
             </div>
           </div>
         </div>
@@ -328,35 +332,13 @@ function App() {
       <section id="sobre" className="section-padding bg-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 gradient-text">Sobre o Evento</h2>
+            <h2 className="text-4xl font-bold mb-4 gradient-text">Tema do Desfile</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-             o Veneza Water Park é o maior parque aquático de Pernambuco. Com 90 mil metros quadrados de área, um complexo gastronômico para todos os gostos e mais de trinta atrações entre radicais e relaxantes, o parque compõe o equipamento turístico mais importante do estado.
+              <strong>"CONECTAMOS HOJE, ESCREVEREMOS O AMANHÃ"</strong>
             </p>
           </div>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-semibold mb-6">Uma Experiência Única</h3>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
-                  <p>Espaço com segurança e comodidade</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
-                  <p>praça de alimentação com oito lanchonetes</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
-                  <p>Posto médico que conta com médico, paramédico, enfermeira e ambulância de plantão</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
-                  <p>Diversão, segurança e tranquilidade</p>
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 gap-4 max-w-2xl">
               <img src={interiorImage1} alt="Interior do Instituto" className="rounded-lg shadow-lg h-48 w-full object-cover" />
               <img src={interiorImage2} alt="Coleções do Instituto" className="rounded-lg shadow-lg h-48 w-full object-cover" />
               <img src={jardimImage} alt="Jardins do Instituto" className="rounded-lg shadow-lg col-span-2 h-64 w-full object-cover" />
@@ -364,32 +346,29 @@ function App() {
           </div>
         </div>
       </section>
-
       
-    {/* Itinerário */}
+      {/* Itinerário */}
       <section id="itinerario" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Sobre o passeio</h2>
+            <h2 className="text-4xl font-bold mb-4">Programação do Evento</h2>
             <p className="text-lg text-muted-foreground">
-              Confira as informações do nosso passeio
+              Confira o cronograma do nosso desfile
             </p>
           </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="card-hover">
               <CardHeader className="text-center">
                 <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-fit">
                   <Clock className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle>Data e Horário</CardTitle>
+                <CardTitle>13:00</CardTitle>
                 <CardDescription>Horário</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-center">
-                  Saída: 03h da manhã
-                </p>
-                <p className="text-sm text-center">
-                  Retorno previsto: 23h do mesmo dia
+                  Horário de concentração, no Centro Educacional Amadeus
                 </p>
               </CardContent>
             </Card>
@@ -398,51 +377,17 @@ function App() {
                 <div className="mx-auto mb-4 p-3 bg-accent/10 rounded-full w-fit">
                   <MapPin className="h-8 w-8 text-accent" />
                 </div>
-                <CardTitle>Local</CardTitle>
+                <CardTitle>Percurso</CardTitle>
                 {/*   <CardDescription>Atividades e diversão</CardDescription>  */}
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-center">
-                  Veneza Water Park - Avenida Dr. Claudio José Gueiros Leite, 10050, Maria Farinha, Paulista – PE
+                  Rua Arari - Rua Cururupu - Rua Carolina - Avenida Maranhão (Encerramento com o Hino Nacional)
                 </p>
               </CardContent>
             </Card>
-            <Card className="card-hover">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-green-500/10 rounded-full w-fit">
-                  <Utensils className="h-8 w-8 text-green-500" />
-                </div>
-                <CardTitle>Lanches Permitidos</CardTitle>
-                <CardDescription>Para entrada no parque</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-sm list-disc list-inside space-y-1 text-left">
-                  <li>Biscoitos, salgadinhos, sucos de caixinha e frutas</li>
-                  <li>Bolos (comemorativos ou em fatias)</li>
-                  <li>Água mineral em garrafas próprias</li>
-                  <li>Refrigerantes em lata</li>
-                  <li>Todos os itens devem ser transportados em bolsas ou bolsas térmicas</li>
-                </ul>
-              </CardContent>
-            </Card>
-            <Card className="card-hover">
-              <CardHeader className="text-center">
-				<div className="mx-auto mb-4 p-3 bg-red-500/10 rounded-full w-fit">
- 					 <XCircle className="h-8 w-8 text-red-500" />
-					</div>
-                <CardTitle>NÃO é Permitidos</CardTitle>
-                <CardDescription>Regras</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-sm list-disc list-inside space-y-1 text-left">
-                  <li>Não é permitido o manuseio de alimentos in natura</li>
-                  <li>Não serão aceitos: embalagens não industriais, recipientes ou embalagens de vidro, coolers, isopores, garrafas PET (exceto água), objetos cortantes ou perfurantes.</li>
-                </ul>
-              </CardContent>
-            </Card>
-			  
           </div>
-          {/*
+           {/*
           <div className="mt-12 text-center">
             <div className="inline-flex items-center space-x-2 bg-white p-4 rounded-lg shadow-sm">
               <Bus className="h-5 w-5 text-primary" />
@@ -452,21 +397,25 @@ function App() {
           */}
         </div>
       </section>
-  {/* Documentação */}
+
+      {/* Documentação */}
       <section id="documentacao" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Observações importantes</h2>
+            <h2 className="text-4xl font-bold mb-4">Trajes e Bonificação</h2>
+            <p className="text-lg text-muted-foreground">
+              Confira as opções de trajes e suas respectivas bonificações
+            </p>
           </div>
 
           <div className="mt-8 p-6 bg-accent/10 rounded-lg border border-accent/20">
             <div className="space-y-4">
               
-			<div className="flex items-start space-x-3">
+              <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="text-sm">
-                  O transporte está incluso no pacote.  
+                    <strong>Fantasia à escolha (de acordo com o tema da sala):</strong> Bonificação de <strong>1,0 ponto</strong> em todas as disciplinas. Ala no desfile: Alunos de fantasia.
                   </p>
                 </div>
               </div>
@@ -475,133 +424,57 @@ function App() {
                 <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="text-sm">
-                    O não comparecimento do aluno no dia do evento não acarretará em reembolso do valor pago. 
+                    <strong>Fardamento completo:</strong> Bonificação de <strong>2,0 pontos</strong>, a ser distribuída em uma ou duas disciplinas. Ala no desfile: Alunos de Farda.
                   </p>
                 </div>
               </div>
+
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="text-sm">
-                   Almoço e lanche poderão ser comprados no park.
+                    <strong>Esporte: terno ou fantasia: </strong> Bonificação de <strong>1,0 ponto</strong> em todas as disciplinas. O aluno irá de terno ou de fantasia do esporte (Ballet, Karatê, Futsal ou Handbol).
                   </p>
                 </div>
-              </div>    
+              </div>
+
+              <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p className="text-sm">
+                    <strong>Lembrando:</strong> A fantasia será usada novamente na culminancia do projeto em novembro.
+                  </p>
+                </div>
+              </div>
+              
+               <div className="flex items-start space-x-3">
+                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
+                <div>
+                  <p className="text-sm">
+                    <strong>Recomendação:</strong> prefiram tecidos com brilho (lamê brocado, tule) e espuma de 3 mm para garantir leveza e destaque. Verificar sugestôes com os professores.
+                  </p>
+                </div>
+              </div>
           
             </div>
           </div>
         </div>
       </section>
 
-				{/* Alimentação Opcional */}
-      <section id="alimentacao" className="section-padding bg-white">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Alimentação Opcional</h2>
-			  <p className="text-lg text-muted-foreground">
-              Esses são os valores do Veneza Park
-            </p>
-          </div>
-
-		     <Card className="bg-yellow-50 border-yellow-200">
-            <CardContent className="p-6">
-              <div className="flex items-start space-x-3 mb-4">
-                <Shield className="h-6 w-6 text-yellow-600 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="font-semibold text-yellow-800 mb-2">Informações Importantes</h3>
-                  <div className="space-y-2 text-sm text-yellow-700">
-                    <p>• Os kits de alimentação são <strong>opcionais</strong> e devem ser pagos separadamente</p>
-                    <p>• O pagamento deverá ser feito <strong>diretamente na escola</strong></p>
-                    <p>• Prazo para pagamento: até <strong>3 dias úteis antes da visita</strong></p>
-                    <p>• Você pode escolher quantos kits desejar ou nenhum</p>
-                    <p>• Também é possível levar seus próprios lanches (conforme regras do parque)</p>
-                  </div>
-                </div>
-              </div>
-              <div className="text-center pt-4 border-t border-yellow-200">
-                <p className="text-sm font-medium text-yellow-800">
-                  Para contratar os kits de alimentação, procure a secretaria da escola após confirmar sua inscrição no passeio
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <Card className="card-hover border-orange-200">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-orange-100 rounded-full w-fit">
-                  <Utensils className="h-8 w-8 text-orange-600" />
-                </div>
-                <CardTitle className="text-orange-800">Kit Almoço Grupo</CardTitle>
-                <CardDescription>Self service até 1kg</CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                <div className="text-2xl font-bold text-orange-600 mb-2">R$ 75,00</div>
-                <p className="text-sm text-muted-foreground mb-4">por pessoa</p>
-                <ul className="text-sm space-y-1 text-left">
-                  <li>• Self service (até 1kg)</li>
-                  <li>• Loja Veneza Sabores</li>
-                  <li>• 1 refrigerante em lata ou suco Del Valle</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="card-hover border-green-200">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-green-100 rounded-full w-fit">
-                  <Utensils className="h-8 w-8 text-green-600" />
-                </div>
-                <CardTitle className="text-green-800">Kit Lanche 1</CardTitle>
-                <CardDescription>Opção completa</CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                <div className="text-2xl font-bold text-green-600 mb-2">R$ 15,00</div>
-                <p className="text-sm text-muted-foreground mb-4">por pessoa</p>
-                <ul className="text-sm space-y-1 text-left">
-                  <li>• Coxinha</li>
-                  <li>• Fatia de pizza mussarela</li>
-                  <li>• Espetinho de carne ou frango</li>
-                  <li>• 1 refrigerante em lata</li>
-                </ul>
-              </CardContent>
-            </Card>
-
-            <Card className="card-hover border-blue-200">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-blue-100 rounded-full w-fit">
-                  <Utensils className="h-8 w-8 text-blue-600" />
-                </div>
-                <CardTitle className="text-blue-800">Kit Lanche 2</CardTitle>
-                <CardDescription>Hambúrguer</CardDescription>
-              </CardHeader>
-              <CardContent className="text-center">
-                <div className="text-2xl font-bold text-blue-600 mb-2">R$ 20,00</div>
-                <p className="text-sm text-muted-foreground mb-4">por pessoa</p>
-                <ul className="text-sm space-y-1 text-left">
-                  <li>• Cheeseburguer</li>
-                  <li>• 1 refrigerante em lata</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-
-     
-        </div>
-      </section>
-		
+        
       {/* Custos e Pagamento */}
       <section id="custos" className="section-padding bg-white">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Inscrição e Taxa</h2>
             <p className="text-lg text-muted-foreground">
-              Valor único por Aluno - À vista ou em até 4x no cartão. 
+              Valor único por Aluno
             </p>
           </div>
 
           <Card className="mb-8">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl text-primary">R$ 280,00</CardTitle>
+              <CardTitle className="text-3xl text-primary">R$ 20,00</CardTitle>
               <CardDescription>por aluno</CardDescription>
               {/* 
               <div className="mt-4 p-3 bg-blue-50 rounded-lg">
@@ -619,11 +492,23 @@ function App() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Transporte ida e volta.
+                      Bandas convidadas;
                     </li>
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Entrada para o park.
+                      Banners;
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
+                      Carro de som;
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
+                      Insfraestrutura de apoio;
+                    </li>
+                    <li className="flex items-center">
+                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
+                      Decoração do desfile.
                     </li>
                   </ul>
                 </div>
@@ -632,11 +517,15 @@ function App() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Pagamento obrigatório até 10 de Outubro de 2025;
+                      Pagamento obrigatório até 10 de setembro de 2025;
                     </li>
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      O fardamento da escola não será usado nesse passeio, roupas apropriadas livre.
+                      Cada aluno deve desfilar acompanhado de um responsável;
+                    </li>
+                    <li className="flex items-start">
+                      <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
+                      Alimentação: não será permitido oferecer alimentos durante o percurso (a não ser que haja alguma emergência). Os alunos poderão levar apenas garrafas com água. 
                     </li>
                   </ul>
                 </div>
@@ -671,9 +560,6 @@ function App() {
               </div>
             </CardContent>
           </Card>
-
-			
-
           {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
           {showForm && (
             <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
@@ -719,36 +605,14 @@ function App() {
                             className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                           >
                             <option value="">Selecione a série</option>
-                           {/* 
-							<option value="Maternal II">Maternal II</option>
-                            <option value="Maternal III">Maternal III</option>
-                            <option value="Grupo 4">Grupo 4</option>
-                            <option value="Grupo 5">Grupo 5</option>
-                            <option value="1º Ano">1º Ano</option>
-                            <option value="2º Ano">2º Ano</option>
-                            <option value="3º Ano">3º Ano</option>
-							*/}
-							<option value="4º Ano">4º Ano</option>
-							<option value="5º Ano">5º Ano</option>
-							<option value="6º Ano">6º Ano</option>
-							<option value="7º Ano">7º Ano</option>
-							<option value="8º Ano">8º Ano</option>
-							<option value="9º Ano">9º Ano</option>
+                            <option value="4º Ano">4º Ano</option>
+                            <option value="5º Ano">5º Ano</option>
+                            <option value="6º Ano">6º Ano</option>
+                            <option value="7º Ano">7º Ano</option>
+                            <option value="8º Ano">8º Ano</option>
+                            <option value="9º Ano">9º Ano</option>
                           </select>
                         </div>
-                        {/* 
-                        <div>
-                          <Label htmlFor="studentClass">Turma do Aluno *</Label>
-                          <Input
-                            id="studentClass"
-                            name="studentClass"
-                            value={formData.studentClass}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Ex: A, B, C"
-                          />
-                        </div>
-                        Dados do Aluno */}
                         <div>
                           <Label htmlFor="studentClass">Turma do Aluno *</Label>
                           <select
@@ -765,6 +629,24 @@ function App() {
                             <option value="C">C</option>
                           </select>
                         </div>                       
+                      </div>
+
+                      {/* ⭐ CAMPO DE CATEGORIA - NOVO */}
+                      <div>
+                        <Label htmlFor="category">Categoria *</Label>
+                        <select
+                          id="category"
+                          name="category"
+                          value={formData.category}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+                        >
+                          <option value="">Selecione a categoria</option>
+                          <option value="livros">Livros</option>
+                          <option value="material">Material</option>
+                          <option value="outros">Outros</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -830,141 +712,154 @@ function App() {
                             }`}
                           />
                           {cpfError && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center">
-                              <span className="mr-1">⚠️</span>
-                              {cpfError}
-                            </p>
+                            <span className="text-xs text-red-600 mt-1">{cpfError}</span>
                           )}
-                          {cpfValid && !cpfError && (
-                            <p className="text-green-600 text-sm mt-1 flex items-center">
-                              <span className="mr-1">✅</span>
-                              CPF válido
-                            </p>
+                          {cpfValid && (
+                            <span className="text-xs text-green-600 mt-1 flex items-center">
+                              <Check className="h-3 w-3 mr-1" /> CPF válido
+                            </span>
                           )}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Seção de Acompanhantes Adicionais 
+                  {/* ⭐ SEÇÃO DE PAGAMENTO - MODIFICADA */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center">
-                      <UserPlus className="mr-2 h-5 w-5" />
-                      Acompanhantes Adicionais
-                    </h3>
-                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
-                      <p className="text-sm text-blue-800 mb-3">
-                        O pacote básico já inclui <strong>pai, mãe e filho</strong>. Você pode adicionar até 5 acompanhantes extras por apenas R$ 20,00 cada.
-                      </p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <Label className="text-sm font-medium">Quantidade de acompanhantes adicionais:</Label>
-                          <div className="flex items-center space-x-2">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              onClick={decreaseCompanions}
-                              disabled={formData.additionalCompanions === 0}
-                            >
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="w-8 text-center font-semibold">
-                              {formData.additionalCompanions}
-                            </span>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              onClick={increaseCompanions}
-                              disabled={formData.additionalCompanions === 5}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        
-                        {formData.additionalCompanions > 0 && (
-                          <div className="text-sm">
-                            <span className="text-green-600 font-medium">
-                              + R$ {(formData.additionalCompanions * 20).toFixed(2).replace('.', ',')}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {formData.additionalCompanions > 0 && (
-                        <div className="mt-3 text-xs text-blue-700">
-                          <strong>Total de pessoas no evento:</strong> {3 + formData.additionalCompanions} pessoas
-                          <br />
-                          <strong>Composição:</strong> Aluno + Pai + Mãe + {formData.additionalCompanions} acompanhante{formData.additionalCompanions > 1 ? 's' : ''} adicional{formData.additionalCompanions > 1 ? 'is' : ''}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  */}
-                  {/* Método de Pagamento */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Método de Pagamento*</h3>
+                    <h3 className="text-lg font-semibold mb-4">Informações de Pagamento *</h3>
                     
-                    <div className="space-y-3 mb-6">
-                      <div 
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.paymentMethod === 'pix' 
-                            ? 'border-orange-400 bg-orange-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1 }))}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                          }`}>
-                            {formData.paymentMethod === 'pix' && (
-                              <div className="w-full h-full rounded-full bg-orange-400"></div>
-                            )}
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-lg font-bold">PIX</span>
-                            <span className="text-sm">
-                              R$ {(280).toFixed(2).replace('.', ',')} (sem taxas)
-                            </span>
+                    {/* ⭐ CAMPO PARA DIGITAR O VALOR - NOVO */}
+                    <div className="mb-6">
+                      <Label htmlFor="paymentAmount">Valor do Pagamento *</Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
+                        <Input
+                          id="paymentAmount"
+                          name="paymentAmount"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={formData.paymentAmount}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="0,00"
+                          className="pl-10"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-600 mt-1">Digite o valor a ser pago</p>
+                    </div>
+
+                    {/* ⭐ OPÇÃO COM OU SEM JUROS - NOVO */}
+                    <div className="mb-6">
+                      <Label className="text-sm font-medium mb-3 block">Tipo de Pagamento *</Label>
+                      <div className="space-y-3">
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.hasInterest === false
+                              ? 'border-green-400 bg-green-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: false }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.hasInterest === false ? 'border-green-400 bg-green-400' : 'border-gray-300'
+                            }`}>
+                              {formData.hasInterest === false && (
+                                <div className="w-full h-full rounded-full bg-green-400"></div>
+                              )}
+                            </div>
+                            <div>
+                              <span className="font-medium">Sem Juros</span>
+                              <p className="text-xs text-gray-600">Pagamento sem acréscimos</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div 
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.paymentMethod === 'credit' 
-                            ? 'border-orange-400 bg-orange-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'credit' }))}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            formData.paymentMethod === 'credit' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                          }`}>
-                            {formData.paymentMethod === 'credit' && (
-                              <div className="w-full h-full rounded-full bg-orange-400"></div>
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-sm">💳</span>
-                              <span className="text-sm font-medium">Cartão de Crédito</span>
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.hasInterest === true
+                              ? 'border-orange-400 bg-orange-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: true }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.hasInterest === true ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                            }`}>
+                              {formData.hasInterest === true && (
+                                <div className="w-full h-full rounded-full bg-orange-400"></div>
+                              )}
                             </div>
-                            <div className="text-xs text-gray-600 ml-6">                        
+                            <div>
+                              <span className="font-medium">Com Juros</span>
+                              <p className="text-xs text-gray-600">Pagamento parcelado com acréscimos</p>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
 
-                    {formData.paymentMethod === 'credit' && (
+                    {/* MÉTODO DE PAGAMENTO */}
+                    <div className="mb-6">
+                      <Label className="text-sm font-medium mb-3 block">Método de Pagamento *</Label>
+                      <div className="space-y-3">
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.paymentMethod === 'pix' 
+                              ? 'border-orange-400 bg-orange-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1 }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                            }`}>
+                              {formData.paymentMethod === 'pix' && (
+                                <div className="w-full h-full rounded-full bg-orange-400"></div>
+                              )}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg font-bold">PIX</span>
+                              <span className="text-sm text-gray-600">(pagamento à vista)</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.paymentMethod === 'credit' 
+                              ? 'border-orange-400 bg-orange-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'credit' }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.paymentMethod === 'credit' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                            }`}>
+                              {formData.paymentMethod === 'credit' && (
+                                <div className="w-full h-full rounded-full bg-orange-400"></div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm">💳</span>
+                                <span className="text-sm font-medium">Cartão de Crédito</span>
+                              </div>
+                              <div className="text-xs text-gray-600 ml-6">
+                                Parcelamento disponível
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* NÚMERO DE PARCELAS (SE CARTÃO DE CRÉDITO) */}
+                    {formData.paymentMethod === 'credit' && formData.paymentAmount > 0 && (
                       <div className="mb-6">
                         <Label className="text-sm font-medium">Número de Parcelas</Label>
                         <select
@@ -972,28 +867,33 @@ function App() {
                           onChange={(e) => setFormData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
                           className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
                         >
-                          <option value={1}>1x de R$ {(valorTotal / 1).toFixed(2).replace('.', ',')}</option>          
-                          <option value={2}>2x de R$ {(valorTotal / 2).toFixed(2).replace('.', ',')}</option>					        
-                          <option value={3}>3x de R$ {(valorTotal / 3).toFixed(2).replace('.', ',')}</option>						        
-                          <option value={4}>4x de R$ {(valorTotal / 4).toFixed(2).replace('.', ',')}</option>
+                          <option value={1}>1x de R$ {(parseFloat(formData.paymentAmount) / 1).toFixed(2).replace('.', ',')}</option>          
+                          <option value={2}>2x de R$ {(parseFloat(formData.paymentAmount) / 2).toFixed(2).replace('.', ',')}</option>					        
+                          <option value={3}>3x de R$ {(parseFloat(formData.paymentAmount) / 3).toFixed(2).replace('.', ',')}</option>						        
+                          <option value={4}>4x de R$ {(parseFloat(formData.paymentAmount) / 4).toFixed(2).replace('.', ',')}</option>
                         </select>
                       </div>
                     )}
 
-                    {/* Valor Total */}
-                    <div className="bg-orange-100 p-4 rounded-lg border border-orange-200">
-                      <div className="text-center">
-                        <h4 className="text-lg font-bold text-orange-800 mb-1">Valor Total</h4>
-                        <div className="text-2xl font-bold text-orange-900">
-                          R$ {valorTotal.toFixed(2).replace('.', ',')}
-                        </div>
-                        {formData.paymentMethod === 'credit' && formData.installments > 1 && (
-                          <div className="text-sm text-orange-700 mt-1">
-                            {formData.installments}x de R$ {valorParcela.toFixed(2).replace('.', ',')}
+                    {/* RESUMO DO VALOR */}
+                    {formData.paymentAmount > 0 && (
+                      <div className="bg-orange-100 p-4 rounded-lg border border-orange-200">
+                        <div className="text-center">
+                          <h4 className="text-lg font-bold text-orange-800 mb-1">Resumo do Pagamento</h4>
+                          <div className="text-2xl font-bold text-orange-900">
+                            R$ {parseFloat(formData.paymentAmount).toFixed(2).replace('.', ',')}
                           </div>
-                        )}
+                          {formData.paymentMethod === 'credit' && formData.installments > 1 && (
+                            <div className="text-sm text-orange-700 mt-1">
+                              {formData.installments}x de R$ {(parseFloat(formData.paymentAmount) / formData.installments).toFixed(2).replace('.', ',')}
+                            </div>
+                          )}
+                          <div className="text-xs text-orange-600 mt-2">
+                            {formData.hasInterest === false ? '✓ Sem juros' : '⚠ Com juros'}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Botão de Envio */}
@@ -1019,9 +919,10 @@ function App() {
               </CardContent>
             </Card>
           )}
-        </div>
-      </section>
 
+
+
+			
       {/* Contato */}
       <section id="contato" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-4xl">
@@ -1076,43 +977,4 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

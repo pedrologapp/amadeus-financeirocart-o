@@ -310,11 +310,9 @@ function App() {
       <section className="hero-section min-h-screen flex items-center justify-center text-white relative">
         <div className="text-center z-10 max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            Desfile de 7 de Setembro
+            Amadeus - geração de Cobranças
           </h1>
-          <p className="text-xl md:text-2xl mb-8 opacity-90">
-            É com grande alegria que convidamos toda a nossa comunidade escolar a participar do tradicional Desfile Cívico em comemoração à independência do Brasil.
-          </p>
+        
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
@@ -325,145 +323,6 @@ function App() {
               Saiba Mais
             </Button>
           </div>
-          <div className="mt-12 flex justify-center items-center space-x-8 text-sm">
-            <div className="flex items-center">
-              <Calendar className="h-5 w-5 mr-2" />
-              14 de Setembro de 2025 - a partir das 13h
-            </div>
-            <div className="flex items-center">
-              <MapPin className="h-5 w-5 mr-2" />
-              Percurso: Rua Arari até Av. Maranhão - São Gonçalo do Amarante - RN
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Sobre o Passeio */}
-      <section id="sobre" className="section-padding bg-white">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 gradient-text">Tema do Desfile</h2>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              <strong>"CONECTAMOS HOJE, ESCREVEREMOS O AMANHÃ"</strong>
-            </p>
-          </div>
-          <div className="flex justify-center">
-            <div className="grid grid-cols-2 gap-4 max-w-2xl">
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Itinerário */}
-      <section id="itinerario" className="section-padding bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Programação do Evento</h2>
-            <p className="text-lg text-muted-foreground">
-              Confira o cronograma do nosso desfile
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="card-hover">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-fit">
-                  <Clock className="h-8 w-8 text-primary" />
-                </div>
-                <CardTitle>13:00</CardTitle>
-                <CardDescription>Horário</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-center">
-                  Horário de concentração, no Centro Educacional Amadeus
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="card-hover">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-accent/10 rounded-full w-fit">
-                  <MapPin className="h-8 w-8 text-accent" />
-                </div>
-                <CardTitle>Percurso</CardTitle>
-                {/*   <CardDescription>Atividades e diversão</CardDescription>  */}
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-center">
-                  Rua Arari - Rua Cururupu - Rua Carolina - Avenida Maranhão (Encerramento com o Hino Nacional)
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-           {/*
-          <div className="mt-12 text-center">
-            <div className="inline-flex items-center space-x-2 bg-white p-4 rounded-lg shadow-sm">
-              <Bus className="h-5 w-5 text-primary" />
-              <span className="font-medium">Término previsto às 17:00</span>
-            </div>
-          </div>
-          */}
-        </div>
-      </section>
-
-      {/* Documentação */}
-      <section id="documentacao" className="section-padding bg-muted/30">
-        <div className="container mx-auto max-w-4xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Trajes e Bonificação</h2>
-            <p className="text-lg text-muted-foreground">
-              Confira as opções de trajes e suas respectivas bonificações
-            </p>
-          </div>
-
-          <div className="mt-8 p-6 bg-accent/10 rounded-lg border border-accent/20">
-            <div className="space-y-4">
-              
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Fantasia à escolha (de acordo com o tema da sala):</strong> Bonificação de <strong>1,0 ponto</strong> em todas as disciplinas. Ala no desfile: Alunos de fantasia.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Fardamento completo:</strong> Bonificação de <strong>2,0 pontos</strong>, a ser distribuída em uma ou duas disciplinas. Ala no desfile: Alunos de Farda.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Esporte: terno ou fantasia: </strong> Bonificação de <strong>1,0 ponto</strong> em todas as disciplinas. O aluno irá de terno ou de fantasia do esporte (Ballet, Karatê, Futsal ou Handbol).
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Lembrando:</strong> A fantasia será usada novamente na culminancia do projeto em novembro.
-                  </p>
-                </div>
-              </div>
-              
-               <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Recomendação:</strong> prefiram tecidos com brilho (lamê brocado, tule) e espuma de 3 mm para garantir leveza e destaque. Verificar sugestôes com os professores.
-                  </p>
-                </div>
-              </div>
-          
-            </div>
           </div>
         </div>
       </section>
@@ -473,7 +332,7 @@ function App() {
       <section id="custos" className="section-padding bg-white">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Inscrição e Taxa</h2>
+            <h2 className="text-4xl font-bold mb-4">Material / Livros / Pagamentos</h2>
             <p className="text-lg text-muted-foreground">
               Valor único por Aluno
             </p>
@@ -567,6 +426,8 @@ function App() {
               </div>
             </CardContent>
           </Card>
+
+			
           {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
           {showForm && (
             <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
@@ -612,6 +473,13 @@ function App() {
                             className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                           >
                             <option value="">Selecione a série</option>
+							<option value="Maternal II">Maternal II</option>					  
+							<option value="Maternal III">Maternal III</option>
+							<option value="Grupo 4">Grupo 4</option>
+							<option value="Grupo 5">Grupo 5</option>
+							<option value="1º Ano">1º Ano</option>
+							<option value="2º Ano">2º Ano</option>
+							<option value="3º Ano">3º Ano</option>
                             <option value="4º Ano">4º Ano</option>
                             <option value="5º Ano">5º Ano</option>
                             <option value="6º Ano">6º Ano</option>
@@ -650,7 +518,9 @@ function App() {
                           className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                         >
                           <option value="">Selecione a categoria</option>
-                          <option value="livros">Livros</option>
+                          <option value="Livro - Fundamental 1">Livro - Fundamental 1</option>
+						  <option value="Livro - Fundamental 2">Livro - Fundamental 2</option>
+						  <option value="Livro - Infantil">Livro - Infantil</option>
                           <option value="material">Material</option>
                           <option value="outros">Outros</option>
                         </select>
@@ -885,7 +755,15 @@ function App() {
                           <option value={1}>1x de {formatCurrency(valorTotal / 1)}</option>          
                           <option value={2}>2x de {formatCurrency(valorTotal / 2)}</option>					        
                           <option value={3}>3x de {formatCurrency(valorTotal / 3)}</option>						        
-                          <option value={4}>4x de {formatCurrency(valorTotal / 4)}</option>
+                          <option value={4}>4x de {formatCurrency(valorTotal / 4)}</option>					        
+                          <option value={5}>5x de {formatCurrency(valorTotal / 5)}</option>				        
+                          <option value={6}>6x de {formatCurrency(valorTotal / 6)}</option>			        
+                          <option value={7}>7x de {formatCurrency(valorTotal / 7)}</option>		        
+                          <option value={8}>8x de {formatCurrency(valorTotal / 8)}</option>	        
+                          <option value={9}>9x de {formatCurrency(valorTotal / 9)}</option>       
+                          <option value={10}>10x de {formatCurrency(valorTotal / 10)}</option>       
+                          <option value={11}>11x de {formatCurrency(valorTotal / 11)}</option>       
+                          <option value={12}>12x de {formatCurrency(valorTotal / 12)}</option>
                         </select>
                       </div>
                     )}
@@ -1015,6 +893,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

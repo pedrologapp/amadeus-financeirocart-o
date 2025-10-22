@@ -795,7 +795,7 @@ function App() {
                               ? 'border-orange-400 bg-orange-50' 
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
-                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: true })}}
+                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: true })}
                         >
                           <div className="flex items-center">
                             <div className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
@@ -1021,6 +1021,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

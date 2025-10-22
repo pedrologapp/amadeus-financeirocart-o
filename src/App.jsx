@@ -30,7 +30,7 @@ import {
   Check 
 } from 'lucide-react';
 // Importando as imagens
-import interiorImage1 from './assets/desfie1.jpg';
+import interiorImage1 from './assets/desfile1.jpg';
 import interiorImage2 from './assets/desfile2.jpg';
 import jardimImage from './assets/desfile3.jpg';
 
@@ -980,5 +980,6 @@ function App() {
 }
 
 export default App;
+
 
 

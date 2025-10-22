@@ -316,56 +316,49 @@ function App() {
       </section>
 
         
-      {/* Custos e Pagamento */}
-<section id="custos" className="section-padding bg-white">
-  <div className="container mx-auto max-w-4xl">
-    <div className="text-center mb-16">
-      <h2 className="text-4xl font-bold mb-4">Material / Livros / Pagamentos</h2>
-      <p className="text-lg text-muted-foreground">
-        Preencha o formulário abaixo para gerar sua cobrança
-      </p>
-    </div>
+{/* Custos e Pagamento */}
+      <section id="custos" className="section-padding bg-white">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Material / Livros / Pagamentos</h2>
+            <p className="text-lg text-muted-foreground">
+              Preencha o formulário abaixo para gerar sua cobrança
+            </p>
+          </div>
 
-    <Card className="mb-8">
-      <CardContent className="pt-6">
-        <Separator className="my-6" />
-        
-        <div className="text-center">
-          {!showForm ? (
-            <Button 
-              size="lg" 
-              className="bg-orange-600 hover:bg-orange-700 px-8 py-3"
-              onClick={showInscricaoForm}
-            >
-              Gerar cobrança
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          ) : (
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="px-8 py-3"
-              onClick={() => setShowForm(false)}
-            >
-              <X className="mr-2 h-4 w-4" />
-              Fechar Formulário
-            </Button>
-          )}
-          <p className="text-xs text-muted-foreground mt-2">
-            {!showForm ? 'Preencha seus dados e escolha a forma de pagamento' : 'Clique acima para fechar o formulário'}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
+          <Card className="mb-8">
+            <CardContent className="pt-6">
+              <Separator className="my-6" />
+              
+              <div className="text-center">
+                {!showForm ? (
+                  <Button 
+                    size="lg" 
+                    className="bg-orange-600 hover:bg-orange-700 px-8 py-3"
+                    onClick={showInscricaoForm}
+                  >
+                    Gerar cobrança
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                ) : (
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    className="px-8 py-3"
+                    onClick={() => setShowForm(false)}
+                  >
+                    <X className="mr-2 h-4 w-4" />
+                    Fechar Formulário
+                  </Button>
+                )}
+                <p className="text-xs text-muted-foreground mt-2">
+                  {!showForm ? 'Preencha seus dados e escolha a forma de pagamento' : 'Clique acima para fechar o formulário'}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-    {/* Aqui virá o formulário quando showForm === true */}
-    {showForm && (
-      <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
-        {/* Conteúdo do formulário aqui */}
-      </Card>
-    )}
-  </div>
-</section>			
+    	
           {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
           {showForm && (
             <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
@@ -831,6 +824,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

@@ -26,12 +26,15 @@ import {
   X,
   Plus,
   Minus,
-  UserPlus
+  UserPlus,
+  Utensils,
+  XCircle,      // <- Adicione este
+  AlertTriangle
 } from 'lucide-react';
 // Importando as imagens
-import interiorImage1 from './assets/desfile1.jpg';
-import interiorImage2 from './assets/desfile2.jpg';
-import jardimImage from './assets/desfile3.jpg';
+import interiorImage1 from './assets/happy1.jpg';
+import interiorImage2 from './assets/happy2.jpg';
+import jardimImage from './assets/happy3.jpg';
 
 function App() {
   // Estados para o formulário
@@ -98,7 +101,7 @@ function App() {
 
   // Cálculo de preço atualizado
   const calculatePrice = () => {
-    const PRECO_BASE = 20.0;
+    const PRECO_BASE = 280.0;
     
     let valorTotal = PRECO_BASE;
     
@@ -206,7 +209,7 @@ function App() {
           installments: formData.installments,
           amount: valorTotal,
           timestamp: new Date().toISOString(),
-          event: 'Amadeus-Desfile7setembro'
+          event: 'Amadeus-venezapark'
         })
       });
 
@@ -293,10 +296,10 @@ function App() {
       <section className="hero-section min-h-screen flex items-center justify-center text-white relative">
         <div className="text-center z-10 max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            Desfile de 7 de Setembro
+            Veneza Water Park
           </h1>
           <p className="text-xl md:text-2xl mb-8 opacity-90">
-            É com grande alegria que convidamos toda a nossa comunidade escolar a participar do tradicional Desfile Cívico em comemoração à independência do Brasil.
+            Em comemoração ao Dia da Criança, realizaremos um passeio especial para o Veneza Park Aquático!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -311,11 +314,11 @@ function App() {
           <div className="mt-12 flex justify-center items-center space-x-8 text-sm">
             <div className="flex items-center">
               <Calendar className="h-5 w-5 mr-2" />
-              14 de Setembro de 2025 - a partir das 13h
+              18 de Outubro de 2025 - dia todo.
             </div>
             <div className="flex items-center">
               <MapPin className="h-5 w-5 mr-2" />
-              Percurso: Rua Arari até Av. Maranhão - São Gonçalo do Amarante - RN
+              Veneza Water Park, Pernambuco.
             </div>
           </div>
         </div>
@@ -325,13 +328,35 @@ function App() {
       <section id="sobre" className="section-padding bg-white">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 gradient-text">Tema do Desfile</h2>
+            <h2 className="text-4xl font-bold mb-4 gradient-text">Sobre o Evento</h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              <strong>"CONECTAMOS HOJE, ESCREVEREMOS O AMANHÃ"</strong>
+             o Veneza Water Park é o maior parque aquático de Pernambuco. Com 90 mil metros quadrados de área, um complexo gastronômico para todos os gostos e mais de trinta atrações entre radicais e relaxantes, o parque compõe o equipamento turístico mais importante do estado.
             </p>
           </div>
-          <div className="flex justify-center">
-            <div className="grid grid-cols-2 gap-4 max-w-2xl">
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-semibold mb-6">Uma Experiência Única</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
+                  <p>Espaço com segurança e comodidade</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
+                  <p>praça de alimentação com oito lanchonetes</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
+                  <p>Posto médico que conta com médico, paramédico, enfermeira e ambulância de plantão</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="h-6 w-6 text-accent mt-1 flex-shrink-0" />
+                  <p>Diversão, segurança e tranquilidade</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
               <img src={interiorImage1} alt="Interior do Instituto" className="rounded-lg shadow-lg h-48 w-full object-cover" />
               <img src={interiorImage2} alt="Coleções do Instituto" className="rounded-lg shadow-lg h-48 w-full object-cover" />
               <img src={jardimImage} alt="Jardins do Instituto" className="rounded-lg shadow-lg col-span-2 h-64 w-full object-cover" />
@@ -339,29 +364,32 @@ function App() {
           </div>
         </div>
       </section>
+
       
-      {/* Itinerário */}
+    {/* Itinerário */}
       <section id="itinerario" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Programação do Evento</h2>
+            <h2 className="text-4xl font-bold mb-4">Sobre o passeio</h2>
             <p className="text-lg text-muted-foreground">
-              Confira o cronograma do nosso desfile
+              Confira as informações do nosso passeio
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="card-hover">
               <CardHeader className="text-center">
                 <div className="mx-auto mb-4 p-3 bg-primary/10 rounded-full w-fit">
                   <Clock className="h-8 w-8 text-primary" />
                 </div>
-                <CardTitle>13:00</CardTitle>
+                <CardTitle>Data e Horário</CardTitle>
                 <CardDescription>Horário</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-center">
-                  Horário de concentração, no Centro Educacional Amadeus
+                  Saída: 03h da manhã
+                </p>
+                <p className="text-sm text-center">
+                  Retorno previsto: 23h do mesmo dia
                 </p>
               </CardContent>
             </Card>
@@ -370,17 +398,51 @@ function App() {
                 <div className="mx-auto mb-4 p-3 bg-accent/10 rounded-full w-fit">
                   <MapPin className="h-8 w-8 text-accent" />
                 </div>
-                <CardTitle>Percurso</CardTitle>
+                <CardTitle>Local</CardTitle>
                 {/*   <CardDescription>Atividades e diversão</CardDescription>  */}
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-center">
-                  Rua Arari - Rua Cururupu - Rua Carolina - Avenida Maranhão (Encerramento com o Hino Nacional)
+                  Veneza Water Park - Avenida Dr. Claudio José Gueiros Leite, 10050, Maria Farinha, Paulista – PE
                 </p>
               </CardContent>
             </Card>
+            <Card className="card-hover">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 p-3 bg-green-500/10 rounded-full w-fit">
+                  <Utensils className="h-8 w-8 text-green-500" />
+                </div>
+                <CardTitle>Lanches Permitidos</CardTitle>
+                <CardDescription>Para entrada no parque</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm list-disc list-inside space-y-1 text-left">
+                  <li>Biscoitos, salgadinhos, sucos de caixinha e frutas</li>
+                  <li>Bolos (comemorativos ou em fatias)</li>
+                  <li>Água mineral em garrafas próprias</li>
+                  <li>Refrigerantes em lata</li>
+                  <li>Todos os itens devem ser transportados em bolsas ou bolsas térmicas</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="card-hover">
+              <CardHeader className="text-center">
+				<div className="mx-auto mb-4 p-3 bg-red-500/10 rounded-full w-fit">
+ 					 <XCircle className="h-8 w-8 text-red-500" />
+					</div>
+                <CardTitle>NÃO é Permitidos</CardTitle>
+                <CardDescription>Regras</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm list-disc list-inside space-y-1 text-left">
+                  <li>Não é permitido o manuseio de alimentos in natura</li>
+                  <li>Não serão aceitos: embalagens não industriais, recipientes ou embalagens de vidro, coolers, isopores, garrafas PET (exceto água), objetos cortantes ou perfurantes.</li>
+                </ul>
+              </CardContent>
+            </Card>
+			  
           </div>
-           {/*
+          {/*
           <div className="mt-12 text-center">
             <div className="inline-flex items-center space-x-2 bg-white p-4 rounded-lg shadow-sm">
               <Bus className="h-5 w-5 text-primary" />
@@ -390,25 +452,21 @@ function App() {
           */}
         </div>
       </section>
-
-      {/* Documentação */}
+  {/* Documentação */}
       <section id="documentacao" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Trajes e Bonificação</h2>
-            <p className="text-lg text-muted-foreground">
-              Confira as opções de trajes e suas respectivas bonificações
-            </p>
+            <h2 className="text-4xl font-bold mb-4">Observações importantes</h2>
           </div>
 
           <div className="mt-8 p-6 bg-accent/10 rounded-lg border border-accent/20">
             <div className="space-y-4">
               
-              <div className="flex items-start space-x-3">
+			<div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="text-sm">
-                    <strong>Fantasia à escolha (de acordo com o tema da sala):</strong> Bonificação de <strong>1,0 ponto</strong> em todas as disciplinas. Ala no desfile: Alunos de fantasia.
+                  O transporte está incluso no pacote.  
                   </p>
                 </div>
               </div>
@@ -417,57 +475,133 @@ function App() {
                 <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="text-sm">
-                    <strong>Fardamento completo:</strong> Bonificação de <strong>2,0 pontos</strong>, a ser distribuída em uma ou duas disciplinas. Ala no desfile: Alunos de Farda.
+                    O não comparecimento do aluno no dia do evento não acarretará em reembolso do valor pago. 
                   </p>
                 </div>
               </div>
-
               <div className="flex items-start space-x-3">
                 <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                 <div>
                   <p className="text-sm">
-                    <strong>Esporte: terno ou fantasia: </strong> Bonificação de <strong>1,0 ponto</strong> em todas as disciplinas. O aluno irá de terno ou de fantasia do esporte (Ballet, Karatê, Futsal ou Handbol).
+                   Almoço e lanche poderão ser comprados no park.
                   </p>
                 </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Lembrando:</strong> A fantasia será usada novamente na culminancia do projeto em novembro.
-                  </p>
-                </div>
-              </div>
-              
-               <div className="flex items-start space-x-3">
-                <div className="w-2 h-2 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                <div>
-                  <p className="text-sm">
-                    <strong>Recomendação:</strong> prefiram tecidos com brilho (lamê brocado, tule) e espuma de 3 mm para garantir leveza e destaque. Verificar sugestôes com os professores.
-                  </p>
-                </div>
-              </div>
+              </div>    
           
             </div>
           </div>
         </div>
       </section>
 
-        
+				{/* Alimentação Opcional */}
+      <section id="alimentacao" className="section-padding bg-white">
+        <div className="container mx-auto max-w-4xl">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Alimentação Opcional</h2>
+			  <p className="text-lg text-muted-foreground">
+              Esses são os valores do Veneza Park
+            </p>
+          </div>
+
+		     <Card className="bg-yellow-50 border-yellow-200">
+            <CardContent className="p-6">
+              <div className="flex items-start space-x-3 mb-4">
+                <Shield className="h-6 w-6 text-yellow-600 mt-1 flex-shrink-0" />
+                <div>
+                  <h3 className="font-semibold text-yellow-800 mb-2">Informações Importantes</h3>
+                  <div className="space-y-2 text-sm text-yellow-700">
+                    <p>• Os kits de alimentação são <strong>opcionais</strong> e devem ser pagos separadamente</p>
+                    <p>• O pagamento deverá ser feito <strong>diretamente na escola</strong></p>
+                    <p>• Prazo para pagamento: até <strong>3 dias úteis antes da visita</strong></p>
+                    <p>• Você pode escolher quantos kits desejar ou nenhum</p>
+                    <p>• Também é possível levar seus próprios lanches (conforme regras do parque)</p>
+                  </div>
+                </div>
+              </div>
+              <div className="text-center pt-4 border-t border-yellow-200">
+                <p className="text-sm font-medium text-yellow-800">
+                  Para contratar os kits de alimentação, procure a secretaria da escola após confirmar sua inscrição no passeio
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <Card className="card-hover border-orange-200">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 p-3 bg-orange-100 rounded-full w-fit">
+                  <Utensils className="h-8 w-8 text-orange-600" />
+                </div>
+                <CardTitle className="text-orange-800">Kit Almoço Grupo</CardTitle>
+                <CardDescription>Self service até 1kg</CardDescription>
+              </CardHeader>
+              <CardContent className="text-center">
+                <div className="text-2xl font-bold text-orange-600 mb-2">R$ 75,00</div>
+                <p className="text-sm text-muted-foreground mb-4">por pessoa</p>
+                <ul className="text-sm space-y-1 text-left">
+                  <li>• Self service (até 1kg)</li>
+                  <li>• Loja Veneza Sabores</li>
+                  <li>• 1 refrigerante em lata ou suco Del Valle</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="card-hover border-green-200">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 p-3 bg-green-100 rounded-full w-fit">
+                  <Utensils className="h-8 w-8 text-green-600" />
+                </div>
+                <CardTitle className="text-green-800">Kit Lanche 1</CardTitle>
+                <CardDescription>Opção completa</CardDescription>
+              </CardHeader>
+              <CardContent className="text-center">
+                <div className="text-2xl font-bold text-green-600 mb-2">R$ 15,00</div>
+                <p className="text-sm text-muted-foreground mb-4">por pessoa</p>
+                <ul className="text-sm space-y-1 text-left">
+                  <li>• Coxinha</li>
+                  <li>• Fatia de pizza mussarela</li>
+                  <li>• Espetinho de carne ou frango</li>
+                  <li>• 1 refrigerante em lata</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="card-hover border-blue-200">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 p-3 bg-blue-100 rounded-full w-fit">
+                  <Utensils className="h-8 w-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-blue-800">Kit Lanche 2</CardTitle>
+                <CardDescription>Hambúrguer</CardDescription>
+              </CardHeader>
+              <CardContent className="text-center">
+                <div className="text-2xl font-bold text-blue-600 mb-2">R$ 20,00</div>
+                <p className="text-sm text-muted-foreground mb-4">por pessoa</p>
+                <ul className="text-sm space-y-1 text-left">
+                  <li>• Cheeseburguer</li>
+                  <li>• 1 refrigerante em lata</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+     
+        </div>
+      </section>
+		
       {/* Custos e Pagamento */}
       <section id="custos" className="section-padding bg-white">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Inscrição e Taxa</h2>
             <p className="text-lg text-muted-foreground">
-              Valor único por Aluno
+              Valor único por Aluno - À vista ou em até 4x no cartão. 
             </p>
           </div>
 
           <Card className="mb-8">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl text-primary">R$ 20,00</CardTitle>
+              <CardTitle className="text-3xl text-primary">R$ 280,00</CardTitle>
               <CardDescription>por aluno</CardDescription>
               {/* 
               <div className="mt-4 p-3 bg-blue-50 rounded-lg">
@@ -485,23 +619,11 @@ function App() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Bandas convidadas;
+                      Transporte ida e volta.
                     </li>
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Banners;
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Carro de som;
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Insfraestrutura de apoio;
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Decoração do desfile.
+                      Entrada para o park.
                     </li>
                   </ul>
                 </div>
@@ -510,15 +632,11 @@ function App() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Pagamento obrigatório até 10 de setembro de 2025;
+                      Pagamento obrigatório até 10 de Outubro de 2025;
                     </li>
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Cada aluno deve desfilar acompanhado de um responsável;
-                    </li>
-                    <li className="flex items-start">
-                      <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Alimentação: não será permitido oferecer alimentos durante o percurso (a não ser que haja alguma emergência). Os alunos poderão levar apenas garrafas com água. 
+                      O fardamento da escola não será usado nesse passeio, roupas apropriadas livre.
                     </li>
                   </ul>
                 </div>
@@ -553,6 +671,8 @@ function App() {
               </div>
             </CardContent>
           </Card>
+
+			
 
           {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
           {showForm && (
@@ -599,19 +719,21 @@ function App() {
                             className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                           >
                             <option value="">Selecione a série</option>
-                            <option value="Maternal II">Maternal II</option>
+                           {/* 
+							<option value="Maternal II">Maternal II</option>
                             <option value="Maternal III">Maternal III</option>
                             <option value="Grupo 4">Grupo 4</option>
                             <option value="Grupo 5">Grupo 5</option>
                             <option value="1º Ano">1º Ano</option>
                             <option value="2º Ano">2º Ano</option>
                             <option value="3º Ano">3º Ano</option>
-                            <option value="4º Ano">4º Ano</option>
-                            <option value="5º Ano">5º Ano</option>
-                            <option value="6º Ano">6º Ano</option>
-                            <option value="7º Ano">7º Ano</option>
-                            <option value="8º Ano">8º Ano</option>
-                            <option value="9º Ano">9º Ano</option>
+							*/}
+							<option value="4º Ano">4º Ano</option>
+							<option value="5º Ano">5º Ano</option>
+							<option value="6º Ano">6º Ano</option>
+							<option value="7º Ano">7º Ano</option>
+							<option value="8º Ano">8º Ano</option>
+							<option value="9º Ano">9º Ano</option>
                           </select>
                         </div>
                         {/* 
@@ -784,107 +906,6 @@ function App() {
                     </div>
                   </div>
                   */}
-                  
-                  {/* Categoria */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Categoria *</h3>
-                    <div className="space-y-3 mb-6">
-                      <Label htmlFor="categoria">Selecione a categoria:</Label>
-                      <select
-                        id="categoria"
-                        name="categoria"
-                        value={formData.categoria}
-                        onChange={handleInputChange}
-                        className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-                        required
-                      >
-                        <option value="livros">Livros</option>
-                        <option value="material">Material</option>
-                        <option value="outros">Outros</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Valor */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Valor *</h3>
-                    <div className="space-y-3 mb-6">
-                      <Label htmlFor="valor">Digite o valor:</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">R$</span>
-                        <Input
-                          id="valor"
-                          name="valor"
-                          type="text"
-                          value={formData.valor}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="0.00"
-                          className="pl-10"
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Use ponto para separar os centavos (ex: 50.00)
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Com ou Sem Juros */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Juros *</h3>
-                    <div className="space-y-3 mb-6">
-                      <div 
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.comJuros === 'sem' 
-                            ? 'border-green-500 bg-green-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, comJuros: 'sem' }))}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            formData.comJuros === 'sem' ? 'border-green-500 bg-green-500' : 'border-gray-300'
-                          }`}>
-                            {formData.comJuros === 'sem' && (
-                              <div className="w-full h-full rounded-full bg-green-500"></div>
-                            )}
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="font-medium">Sem Juros</span>
-                            <Badge variant="outline" className="bg-green-100 text-green-700 border-green-300">
-                              Recomendado
-                            </Badge>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div 
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.comJuros === 'com' 
-                            ? 'border-orange-400 bg-orange-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, comJuros: 'com' }))}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            formData.comJuros === 'com' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                          }`}>
-                            {formData.comJuros === 'com' && (
-                              <div className="w-full h-full rounded-full bg-orange-400"></div>
-                            )}
-                          </div>
-                          <div>
-                            <span className="font-medium">Com Juros</span>
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Taxas aplicadas conforme quantidade de parcelas
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
                   {/* Método de Pagamento */}
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Método de Pagamento*</h3>
@@ -909,12 +930,12 @@ function App() {
                           <div className="flex items-center space-x-2">
                             <span className="text-lg font-bold">PIX</span>
                             <span className="text-sm">
-                              R$ {(20).toFixed(2).replace('.', ',')} (sem taxas)
+                              R$ {(280).toFixed(2).replace('.', ',')} (sem taxas)
                             </span>
                           </div>
                         </div>
                       </div>
-                      {/*
+
                       <div 
                         className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                           formData.paymentMethod === 'credit' 
@@ -941,7 +962,6 @@ function App() {
                           </div>
                         </div>
                       </div>
-                      */}
                     </div>
 
                     {formData.paymentMethod === 'credit' && (
@@ -952,7 +972,10 @@ function App() {
                           onChange={(e) => setFormData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
                           className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
                         >
-                          <option value={1}>1x de R$ {(valorTotal / 1).toFixed(2).replace('.', ',')}</option>
+                          <option value={1}>1x de R$ {(valorTotal / 1).toFixed(2).replace('.', ',')}</option>          
+                          <option value={2}>2x de R$ {(valorTotal / 2).toFixed(2).replace('.', ',')}</option>					        
+                          <option value={3}>3x de R$ {(valorTotal / 3).toFixed(2).replace('.', ',')}</option>						        
+                          <option value={4}>4x de R$ {(valorTotal / 4).toFixed(2).replace('.', ',')}</option>
                         </select>
                       </div>
                     )}
@@ -961,23 +984,9 @@ function App() {
                     <div className="bg-orange-100 p-4 rounded-lg border border-orange-200">
                       <div className="text-center">
                         <h4 className="text-lg font-bold text-orange-800 mb-1">Valor Total</h4>
-                        
-                        {formData.comJuros === 'com' && formData.valor && parseFloat(formData.valor) > 0 && (
-                          <div className="text-sm text-orange-700 mb-1">
-                            Valor base: R$ {parseFloat(formData.valor).toFixed(2).replace('.', ',')}
-                          </div>
-                        )}
-                        
                         <div className="text-2xl font-bold text-orange-900">
                           R$ {valorTotal.toFixed(2).replace('.', ',')}
                         </div>
-                        
-                        {formData.comJuros === 'com' && formData.valor && parseFloat(formData.valor) > 0 && (
-                          <div className="text-xs text-orange-600 mt-1">
-                            (com taxas de juros aplicadas)
-                          </div>
-                        )}
-                        
                         {formData.paymentMethod === 'credit' && formData.installments > 1 && (
                           <div className="text-sm text-orange-700 mt-1">
                             {formData.installments}x de R$ {valorParcela.toFixed(2).replace('.', ',')}
@@ -1067,12 +1076,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
 
 
 

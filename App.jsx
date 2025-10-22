@@ -560,7 +560,7 @@ function App() {
               </div>
             </CardContent>
           </Card>
-{/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
+          {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
           {showForm && (
             <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
               <CardHeader>
@@ -605,36 +605,14 @@ function App() {
                             className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                           >
                             <option value="">Selecione a série</option>
-                           {/* 
-								<option value="Maternal II">Maternal II</option>
-                            <option value="Maternal III">Maternal III</option>
-                            <option value="Grupo 4">Grupo 4</option>
-                            <option value="Grupo 5">Grupo 5</option>
-                            <option value="1º Ano">1º Ano</option>
-                            <option value="2º Ano">2º Ano</option>
-                            <option value="3º Ano">3º Ano</option>
-							*/}
-							<option value="4º Ano">4º Ano</option>
-							<option value="5º Ano">5º Ano</option>
-							<option value="6º Ano">6º Ano</option>
-							<option value="7º Ano">7º Ano</option>
-							<option value="8º Ano">8º Ano</option>
-							<option value="9º Ano">9º Ano</option>
+                            <option value="4º Ano">4º Ano</option>
+                            <option value="5º Ano">5º Ano</option>
+                            <option value="6º Ano">6º Ano</option>
+                            <option value="7º Ano">7º Ano</option>
+                            <option value="8º Ano">8º Ano</option>
+                            <option value="9º Ano">9º Ano</option>
                           </select>
                         </div>
-                        {/* 
-                        <div>
-                          <Label htmlFor="studentClass">Turma do Aluno *</Label>
-                          <Input
-                            id="studentClass"
-                            name="studentClass"
-                            value={formData.studentClass}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="Ex: A, B, C"
-                          />
-                        </div>
-                        Dados do Aluno */}
                         <div>
                           <Label htmlFor="studentClass">Turma do Aluno *</Label>
                           <select
@@ -653,7 +631,7 @@ function App() {
                         </div>                       
                       </div>
 
-                      {/* NOVA SEÇÃO: CATEGORIA */}
+                      {/* ⭐ CAMPO DE CATEGORIA - NOVO */}
                       <div>
                         <Label htmlFor="category">Categoria *</Label>
                         <select
@@ -746,74 +724,11 @@ function App() {
                     </div>
                   </div>
 
-                  {/* 
-                  Acompanhantes Adicionais
-                  <div>
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Acompanhantes Adicionais</Label>
-                        <p className="text-sm text-gray-600 mb-3">
-                          Cada inscrição já inclui: Aluno + Pai + Mãe (3 pessoas)
-                        </p>
-                        
-                        <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
-                          <div>
-                            <div className="font-medium">Adicionar mais acompanhantes</div>
-                            <div className="text-sm text-gray-600">R$ 20,00 por pessoa adicional</div>
-                          </div>
-                          
-                          <div className="flex items-center gap-3">
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              onClick={decreaseCompanions}
-                              disabled={formData.additionalCompanions === 0}
-                            >
-                              <Minus className="h-4 w-4" />
-                            </Button>
-                            <span className="w-8 text-center font-semibold">
-                              {formData.additionalCompanions}
-                            </span>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              className="h-8 w-8 p-0"
-                              onClick={increaseCompanions}
-                              disabled={formData.additionalCompanions === 5}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        
-                        {formData.additionalCompanions > 0 && (
-                          <div className="text-sm">
-                            <span className="text-green-600 font-medium">
-                              + R$ {(formData.additionalCompanions * 20).toFixed(2).replace('.', ',')}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {formData.additionalCompanions > 0 && (
-                        <div className="mt-3 text-xs text-blue-700">
-                          <strong>Total de pessoas no evento:</strong> {3 + formData.additionalCompanions} pessoas
-                          <br />
-                          <strong>Composição:</strong> Aluno + Pai + Mãe + {formData.additionalCompanions} acompanhante{formData.additionalCompanions > 1 ? 's' : ''} adicional{formData.additionalCompanions > 1 ? 'is' : ''}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  */}
-
-                  {/* SEÇÃO DE PAGAMENTO MODIFICADA */}
+                  {/* ⭐ SEÇÃO DE PAGAMENTO - MODIFICADA */}
                   <div>
                     <h3 className="text-lg font-semibold mb-4">Informações de Pagamento *</h3>
                     
-                    {/* CAMPO PARA DIGITAR O VALOR */}
+                    {/* ⭐ CAMPO PARA DIGITAR O VALOR - NOVO */}
                     <div className="mb-6">
                       <Label htmlFor="paymentAmount">Valor do Pagamento *</Label>
                       <div className="relative">
@@ -834,7 +749,7 @@ function App() {
                       <p className="text-xs text-gray-600 mt-1">Digite o valor a ser pago</p>
                     </div>
 
-                    {/* OPÇÃO COM OU SEM JUROS */}
+                    {/* ⭐ OPÇÃO COM OU SEM JUROS - NOVO */}
                     <div className="mb-6">
                       <Label className="text-sm font-medium mb-3 block">Tipo de Pagamento *</Label>
                       <div className="space-y-3">
@@ -1004,8 +919,10 @@ function App() {
               </CardContent>
             </Card>
           )}
-        </div>
-      </section>
+
+
+
+			
       {/* Contato */}
       <section id="contato" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-4xl">
@@ -1060,6 +977,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

@@ -295,12 +295,7 @@ function App() {
           <div className="flex justify-between items-center">
             <h1 className="text-xl font-bold text-blue-900">Escola Amadeus</h1>
             <div className="hidden md:flex space-x-6">
-              <button onClick={() => scrollToSection('sobre')} className="text-sm hover:text-primary transition-colors">Sobre</button>
-              <button onClick={() => scrollToSection('Programação do Evento')} className="text-sm hover:text-primary transition-colors">Programação do Evento</button>
-              <button onClick={() => scrollToSection('custos')} className="text-sm hover:text-primary transition-colors">Custos</button>
-              <button onClick={() => scrollToSection('Observação')} className="text-sm hover:text-primary transition-colors">Observação</button>
-              <button onClick={() => scrollToSection('orientacoes')} className="text-sm hover:text-primary transition-colors">Orientações</button>
-              <button onClick={() => scrollToSection('contato')} className="text-sm hover:text-primary transition-colors">Contato</button>
+              <button onClick={() => scrollToSection('custos')} className="text-sm hover:text-primary transition-colors">Gerar Cobrança</button>
             </div>
           </div>
         </nav>
@@ -887,6 +882,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

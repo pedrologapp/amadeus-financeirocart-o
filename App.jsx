@@ -40,6 +40,9 @@ function App() {
     studentName: '',
     studentGrade: '',
     studentClass: '',
+	category: '',           // Categoria: livros, material ou outros
+  	paymentAmount: '',      // Valor do pagamento
+  	hasInterest: false,     // Com ou sem juros
     parentName: '',
     cpf: '',
     email: '',
@@ -1053,6 +1056,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

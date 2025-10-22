@@ -924,6 +924,7 @@ function App() {
 
 
 
+
 			
       {/* Contato */}
       <section id="contato" className="section-padding bg-muted/30">

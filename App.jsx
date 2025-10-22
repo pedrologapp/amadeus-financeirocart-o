@@ -26,7 +26,8 @@ import {
   X,
   Plus,
   Minus,
-  UserPlus
+  UserPlus,
+  Check 
 } from 'lucide-react';
 // Importando as imagens
 import interiorImage1 from './assets/desfie1.jpg';
@@ -201,10 +202,13 @@ function App() {
           studentName: formData.studentName,
           studentGrade: formData.studentGrade,
           studentClass: formData.studentClass,
+		  category: formData.category,
           parentName: formData.parentName,
           cpf: formData.cpf,
           email: formData.email,
           phone: formData.phone,
+		  paymentAmount: formData.paymentAmount,    // ⭐ ADICIONE
+  		  hasInterest: formData.hasInterest,
           paymentMethod: formData.paymentMethod,
           installments: formData.installments,
           amount: valorTotal,
@@ -1056,6 +1060,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

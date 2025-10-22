@@ -314,16 +314,9 @@ function App() {
           </h1>
         
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-white text-white hover:bg-white hover:text-primary px-8 py-3 bg-white text-primary"
-              onClick={() => scrollToSection("sobre")}
-            >
-              Saiba Mais
-            </Button>
+           
           </div>
-          </div>
+
         </div>
       </section>
 
@@ -893,6 +886,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

@@ -553,8 +553,7 @@ function App() {
               </div>
             </CardContent>
           </Card>
-
-          {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
+{/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
           {showForm && (
             <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
               <CardHeader>
@@ -599,19 +598,21 @@ function App() {
                             className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
                           >
                             <option value="">Selecione a série</option>
-                            <option value="Maternal II">Maternal II</option>
+                           {/* 
+								<option value="Maternal II">Maternal II</option>
                             <option value="Maternal III">Maternal III</option>
                             <option value="Grupo 4">Grupo 4</option>
                             <option value="Grupo 5">Grupo 5</option>
                             <option value="1º Ano">1º Ano</option>
                             <option value="2º Ano">2º Ano</option>
                             <option value="3º Ano">3º Ano</option>
-                            <option value="4º Ano">4º Ano</option>
-                            <option value="5º Ano">5º Ano</option>
-                            <option value="6º Ano">6º Ano</option>
-                            <option value="7º Ano">7º Ano</option>
-                            <option value="8º Ano">8º Ano</option>
-                            <option value="9º Ano">9º Ano</option>
+							*/}
+							<option value="4º Ano">4º Ano</option>
+							<option value="5º Ano">5º Ano</option>
+							<option value="6º Ano">6º Ano</option>
+							<option value="7º Ano">7º Ano</option>
+							<option value="8º Ano">8º Ano</option>
+							<option value="9º Ano">9º Ano</option>
                           </select>
                         </div>
                         {/* 
@@ -643,6 +644,24 @@ function App() {
                             <option value="C">C</option>
                           </select>
                         </div>                       
+                      </div>
+
+                      {/* NOVA SEÇÃO: CATEGORIA */}
+                      <div>
+                        <Label htmlFor="category">Categoria *</Label>
+                        <select
+                          id="category"
+                          name="category"
+                          value={formData.category}
+                          onChange={handleInputChange}
+                          required
+                          className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+                        >
+                          <option value="">Selecione a categoria</option>
+                          <option value="livros">Livros</option>
+                          <option value="material">Material</option>
+                          <option value="outros">Outros</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -708,37 +727,35 @@ function App() {
                             }`}
                           />
                           {cpfError && (
-                            <p className="text-red-500 text-sm mt-1 flex items-center">
-                              <span className="mr-1">⚠️</span>
-                              {cpfError}
-                            </p>
+                            <span className="text-xs text-red-600 mt-1">{cpfError}</span>
                           )}
-                          {cpfValid && !cpfError && (
-                            <p className="text-green-600 text-sm mt-1 flex items-center">
-                              <span className="mr-1">✅</span>
-                              CPF válido
-                            </p>
+                          {cpfValid && (
+                            <span className="text-xs text-green-600 mt-1 flex items-center">
+                              <Check className="h-3 w-3 mr-1" /> CPF válido
+                            </span>
                           )}
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Seção de Acompanhantes Adicionais 
+                  {/* 
+                  Acompanhantes Adicionais
                   <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center">
-                      <UserPlus className="mr-2 h-5 w-5" />
-                      Acompanhantes Adicionais
-                    </h3>
-                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
-                      <p className="text-sm text-blue-800 mb-3">
-                        O pacote básico já inclui <strong>pai, mãe e filho</strong>. Você pode adicionar até 5 acompanhantes extras por apenas R$ 20,00 cada.
-                      </p>
-                      
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-4">
-                          <Label className="text-sm font-medium">Quantidade de acompanhantes adicionais:</Label>
-                          <div className="flex items-center space-x-2">
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Acompanhantes Adicionais</Label>
+                        <p className="text-sm text-gray-600 mb-3">
+                          Cada inscrição já inclui: Aluno + Pai + Mãe (3 pessoas)
+                        </p>
+                        
+                        <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg border border-blue-200">
+                          <div>
+                            <div className="font-medium">Adicionar mais acompanhantes</div>
+                            <div className="text-sm text-gray-600">R$ 20,00 por pessoa adicional</div>
+                          </div>
+                          
+                          <div className="flex items-center gap-3">
                             <Button
                               type="button"
                               variant="outline"
@@ -784,66 +801,143 @@ function App() {
                     </div>
                   </div>
                   */}
-                  {/* Método de Pagamento */}
+
+                  {/* SEÇÃO DE PAGAMENTO MODIFICADA */}
                   <div>
-                    <h3 className="text-lg font-semibold mb-4">Método de Pagamento*</h3>
+                    <h3 className="text-lg font-semibold mb-4">Informações de Pagamento *</h3>
                     
-                    <div className="space-y-3 mb-6">
-                      <div 
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.paymentMethod === 'pix' 
-                            ? 'border-orange-400 bg-orange-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1 }))}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                          }`}>
-                            {formData.paymentMethod === 'pix' && (
-                              <div className="w-full h-full rounded-full bg-orange-400"></div>
-                            )}
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-lg font-bold">PIX</span>
-                            <span className="text-sm">
-                              R$ {(20).toFixed(2).replace('.', ',')} (sem taxas)
-                            </span>
-                          </div>
-                        </div>
+                    {/* CAMPO PARA DIGITAR O VALOR */}
+                    <div className="mb-6">
+                      <Label htmlFor="paymentAmount">Valor do Pagamento *</Label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
+                        <Input
+                          id="paymentAmount"
+                          name="paymentAmount"
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={formData.paymentAmount}
+                          onChange={handleInputChange}
+                          required
+                          placeholder="0,00"
+                          className="pl-10"
+                        />
                       </div>
-                      {/*
-                      <div 
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                          formData.paymentMethod === 'credit' 
-                            ? 'border-orange-400 bg-orange-50' 
-                            : 'border-gray-200 hover:border-gray-300'
-                        }`}
-                        onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'credit' }))}
-                      >
-                        <div className="flex items-center">
-                          <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                            formData.paymentMethod === 'credit' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                          }`}>
-                            {formData.paymentMethod === 'credit' && (
-                              <div className="w-full h-full rounded-full bg-orange-400"></div>
-                            )}
-                          </div>
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <span className="text-sm">💳</span>
-                              <span className="text-sm font-medium">Cartão de Crédito</span>
-                            </div>
-                            <div className="text-xs text-gray-600 ml-6">                        
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      */}
+                      <p className="text-xs text-gray-600 mt-1">Digite o valor a ser pago</p>
                     </div>
 
-                    {formData.paymentMethod === 'credit' && (
+                    {/* OPÇÃO COM OU SEM JUROS */}
+                    <div className="mb-6">
+                      <Label className="text-sm font-medium mb-3 block">Tipo de Pagamento *</Label>
+                      <div className="space-y-3">
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.hasInterest === false
+                              ? 'border-green-400 bg-green-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: false }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.hasInterest === false ? 'border-green-400 bg-green-400' : 'border-gray-300'
+                            }`}>
+                              {formData.hasInterest === false && (
+                                <div className="w-full h-full rounded-full bg-green-400"></div>
+                              )}
+                            </div>
+                            <div>
+                              <span className="font-medium">Sem Juros</span>
+                              <p className="text-xs text-gray-600">Pagamento sem acréscimos</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.hasInterest === true
+                              ? 'border-orange-400 bg-orange-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, hasInterest: true }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.hasInterest === true ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                            }`}>
+                              {formData.hasInterest === true && (
+                                <div className="w-full h-full rounded-full bg-orange-400"></div>
+                              )}
+                            </div>
+                            <div>
+                              <span className="font-medium">Com Juros</span>
+                              <p className="text-xs text-gray-600">Pagamento parcelado com acréscimos</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* MÉTODO DE PAGAMENTO */}
+                    <div className="mb-6">
+                      <Label className="text-sm font-medium mb-3 block">Método de Pagamento *</Label>
+                      <div className="space-y-3">
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.paymentMethod === 'pix' 
+                              ? 'border-orange-400 bg-orange-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1 }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                            }`}>
+                              {formData.paymentMethod === 'pix' && (
+                                <div className="w-full h-full rounded-full bg-orange-400"></div>
+                              )}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-lg font-bold">PIX</span>
+                              <span className="text-sm text-gray-600">(pagamento à vista)</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div 
+                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                            formData.paymentMethod === 'credit' 
+                              ? 'border-orange-400 bg-orange-50' 
+                              : 'border-gray-200 hover:border-gray-300'
+                          }`}
+                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'credit' }))}
+                        >
+                          <div className="flex items-center">
+                            <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
+                              formData.paymentMethod === 'credit' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                            }`}>
+                              {formData.paymentMethod === 'credit' && (
+                                <div className="w-full h-full rounded-full bg-orange-400"></div>
+                              )}
+                            </div>
+                            <div>
+                              <div className="flex items-center space-x-2">
+                                <span className="text-sm">💳</span>
+                                <span className="text-sm font-medium">Cartão de Crédito</span>
+                              </div>
+                              <div className="text-xs text-gray-600 ml-6">
+                                Parcelamento disponível
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* NÚMERO DE PARCELAS (SE CARTÃO DE CRÉDITO) */}
+                    {formData.paymentMethod === 'credit' && formData.paymentAmount > 0 && (
                       <div className="mb-6">
                         <Label className="text-sm font-medium">Número de Parcelas</Label>
                         <select
@@ -851,25 +945,33 @@ function App() {
                           onChange={(e) => setFormData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
                           className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
                         >
-                          <option value={1}>1x de R$ {(valorTotal / 1).toFixed(2).replace('.', ',')}</option>
+                          <option value={1}>1x de R$ {(parseFloat(formData.paymentAmount) / 1).toFixed(2).replace('.', ',')}</option>          
+                          <option value={2}>2x de R$ {(parseFloat(formData.paymentAmount) / 2).toFixed(2).replace('.', ',')}</option>					        
+                          <option value={3}>3x de R$ {(parseFloat(formData.paymentAmount) / 3).toFixed(2).replace('.', ',')}</option>						        
+                          <option value={4}>4x de R$ {(parseFloat(formData.paymentAmount) / 4).toFixed(2).replace('.', ',')}</option>
                         </select>
                       </div>
                     )}
 
-                    {/* Valor Total */}
-                    <div className="bg-orange-100 p-4 rounded-lg border border-orange-200">
-                      <div className="text-center">
-                        <h4 className="text-lg font-bold text-orange-800 mb-1">Valor Total</h4>
-                        <div className="text-2xl font-bold text-orange-900">
-                          R$ {valorTotal.toFixed(2).replace('.', ',')}
-                        </div>
-                        {formData.paymentMethod === 'credit' && formData.installments > 1 && (
-                          <div className="text-sm text-orange-700 mt-1">
-                            {formData.installments}x de R$ {valorParcela.toFixed(2).replace('.', ',')}
+                    {/* RESUMO DO VALOR */}
+                    {formData.paymentAmount > 0 && (
+                      <div className="bg-orange-100 p-4 rounded-lg border border-orange-200">
+                        <div className="text-center">
+                          <h4 className="text-lg font-bold text-orange-800 mb-1">Resumo do Pagamento</h4>
+                          <div className="text-2xl font-bold text-orange-900">
+                            R$ {parseFloat(formData.paymentAmount).toFixed(2).replace('.', ',')}
                           </div>
-                        )}
+                          {formData.paymentMethod === 'credit' && formData.installments > 1 && (
+                            <div className="text-sm text-orange-700 mt-1">
+                              {formData.installments}x de R$ {(parseFloat(formData.paymentAmount) / formData.installments).toFixed(2).replace('.', ',')}
+                            </div>
+                          )}
+                          <div className="text-xs text-orange-600 mt-2">
+                            {formData.hasInterest === false ? '✓ Sem juros' : '⚠ Com juros'}
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Botão de Envio */}
@@ -897,7 +999,6 @@ function App() {
           )}
         </div>
       </section>
-
       {/* Contato */}
       <section id="contato" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-4xl">
@@ -952,6 +1053,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

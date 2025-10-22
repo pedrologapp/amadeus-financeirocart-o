@@ -326,64 +326,6 @@ function App() {
             </p>
           </div>
 
-          <Card className="mb-8">
-            <CardHeader className="text-center">
-              <CardTitle className="text-3xl text-primary"></CardTitle>
-              <CardDescription>/CardDescription>
-              {/* 
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  <UserPlus className="inline h-4 w-4 mr-1" />
-                  <strong>Acompanhantes adicionais:</strong> R$ 20,00 cada 
-                </p>
-              </div>
-             */}
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-semibold mb-3 text-accent"></h4>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-  
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-
-                    </li>
-                    <li className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-accent mr-2" />
-
-                    </li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-3 text-destructive">Informações importantes:</h4>
-                  <ul className="space-y-2 text-sm">
-                    <li className="flex items-start">
-                      <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-
-                    </li>
-                    <li className="flex items-start">
-                      <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
- 
-                    </li>
-                    <li className="flex items-start">
-                      <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-
-                    </li>
-                  </ul>
-                </div>
-              </div>
               
               <Separator className="my-6" />
               
@@ -394,7 +336,7 @@ function App() {
                     className="bg-orange-600 hover:bg-orange-700 px-8 py-3"
                     onClick={showInscricaoForm}
                   >
-                    Realizar Inscrição e Pagamento
+                    Gerar cobrança
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 ) : (
@@ -881,6 +823,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

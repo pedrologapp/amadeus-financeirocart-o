@@ -322,14 +322,14 @@ function App() {
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">Material / Livros / Pagamentos</h2>
             <p className="text-lg text-muted-foreground">
-              Valor único por Aluno
+
             </p>
           </div>
 
           <Card className="mb-8">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl text-primary">R$ 20,00</CardTitle>
-              <CardDescription>por aluno</CardDescription>
+              <CardTitle className="text-3xl text-primary"></CardTitle>
+              <CardDescription>/CardDescription>
               {/* 
               <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                 <p className="text-sm text-blue-800">
@@ -342,27 +342,27 @@ function App() {
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-semibold mb-3 text-accent">O que está incluído:</h4>
+                  <h4 className="font-semibold mb-3 text-accent"></h4>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Bandas convidadas;
+
                     </li>
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Banners;
+
                     </li>
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Carro de som;
+  
                     </li>
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Insfraestrutura de apoio;
+
                     </li>
                     <li className="flex items-center">
                       <CheckCircle className="h-4 w-4 text-accent mr-2" />
-                      Decoração do desfile.
+
                     </li>
                   </ul>
                 </div>
@@ -371,15 +371,15 @@ function App() {
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Pagamento obrigatório até 10 de setembro de 2025;
+
                     </li>
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Cada aluno deve desfilar acompanhado de um responsável;
+ 
                     </li>
                     <li className="flex items-start">
                       <Shield className="h-4 w-4 text-destructive mr-2 mt-0.5" />
-                      Alimentação: não será permitido oferecer alimentos durante o percurso (a não ser que haja alguma emergência). Os alunos poderão levar apenas garrafas com água. 
+
                     </li>
                   </ul>
                 </div>
@@ -422,10 +422,10 @@ function App() {
               <CardHeader>
                 <CardTitle className="flex items-center text-orange-800">
                   <User className="mr-2 h-5 w-5" />
-                  Formulário de Inscrição
+                  Gerar cobrança
                 </CardTitle>
                 <CardDescription>
-                  Preencha todos os dados para garantir sua participação
+                  Preencha todos os dados para gerar a cobrança
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -881,6 +881,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

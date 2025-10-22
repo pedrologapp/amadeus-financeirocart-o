@@ -305,8 +305,7 @@ function App() {
       <section className="hero-section min-h-screen flex items-center justify-center text-white relative">
         <div className="text-center z-10 max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-            EduHUB 
-			Geração de Cobranças
+           Escola Amadeus - Geração de Cobranças
           </h1>
         
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -882,6 +881,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

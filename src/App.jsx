@@ -223,7 +223,7 @@ function App() {
     setIsProcessing(true);
 
     try {
-      const response = await fetch('https://flowmix.app.n8n.cloud/webhook/14c52b9c-9a62-4a0d-8c06-c8f19c30f7a3', {
+      const response = await fetch('https://n8n.escolaamadeus.com/webhook-test/amadeusfinanceiro, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -840,6 +840,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

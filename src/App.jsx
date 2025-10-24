@@ -416,28 +416,50 @@ function App() {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="studentGrade">Série *</Label>
-                        <Input
+                        <Label htmlFor="studentGrade">
+                          Série 
+                          <span className="text-gray-400 text-sm ml-1">(opcional)</span>
+                        </Label>
+                        <select
                           id="studentGrade"
                           name="studentGrade"
                           value={formData.studentGrade}
                           onChange={handleInputChange}
-                          placeholder="Ex: 5º ano"
-                          required
-                          className="mt-2"
-                        />
+                          className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
+                        >
+                          <option value="">Selecione a série</option>
+                          <option value="Maternal II">Maternal II</option>
+                          <option value="Maternal III">Maternal III</option>
+                          <option value="Grupo 4">Grupo 4</option>
+                          <option value="Grupo 5">Grupo 5</option>
+                          <option value="1º Ano">1º Ano</option>
+                          <option value="2º Ano">2º Ano</option>
+                          <option value="3º Ano">3º Ano</option>
+                          <option value="4º Ano">4º Ano</option>
+                          <option value="5º Ano">5º Ano</option>
+                          <option value="6º Ano">6º Ano</option>
+                          <option value="7º Ano">7º Ano</option>
+                          <option value="8º Ano">8º Ano</option>
+                          <option value="9º Ano">9º Ano</option>
+                        </select>
                       </div>
                       <div>
-                        <Label htmlFor="studentClass">Turma *</Label>
-                        <Input
+                        <Label htmlFor="studentClass">
+                          Turma 
+                          <span className="text-gray-400 text-sm ml-1">(opcional)</span>
+                        </Label>
+                        <select
                           id="studentClass"
                           name="studentClass"
                           value={formData.studentClass}
                           onChange={handleInputChange}
-                          placeholder="Ex: A"
-                          required
-                          className="mt-2"
-                        />
+                          className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
+                        >
+                          <option value="">Selecione a turma</option>
+                          <option value="A">A</option>
+                          <option value="B">B</option>
+                          <option value="C">C</option>
+                        </select>
                       </div>
                     </div>
                   </div>
@@ -818,6 +840,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

@@ -223,7 +223,7 @@ function App() {
     setIsProcessing(true);
 
     try {
-      const response = await fetch('https://n8n.escolaamadeus.com/webhook-test/amadeusfinanceiro', {
+      const response = await fetch('https://webhook.escolaamadeus.com/webhook/amadeuseventos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -838,6 +838,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

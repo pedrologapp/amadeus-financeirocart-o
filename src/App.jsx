@@ -37,15 +37,16 @@ function App() {
               studentName: '',
               studentGrade: '',
               studentClass: '',
-              category: '',           // Categoria: livros, material ou outros
-              paymentAmount: '',      // Valor do pagamento
-              hasInterest: false,     // Com ou sem juros
+              category: '',
+              paymentAmount: '',
+              hasInterest: false,
               parentName: '',
               cpf: '',
               email: '',
               phone: '',
               paymentMethod: 'pix',
-              installments: 1
+              installments: 1,
+              observations: ''
        });
        const [isProcessing, setIsProcessing] = useState(false);
        const [inscriptionSuccess, setInscriptionSuccess] = useState(false);
@@ -107,9 +108,31 @@ function App() {
               }).format(numValue);
        };
 
-       // Cálculo de preço atualizado
+       // Função para calcular valor da parcela para um número específico de parcelas
+       const calculateInstallmentValue = (numParcelas) => {
+              const valorBase = parseFloat(formData.paymentAmount) || 0;
+              
+              if (!formData.hasInterest || formData.paymentMethod !== 'credit') {
+                     return valorBase / numParcelas;
+              }
+              
+              let taxaPercentual = 0;
+              const taxaFixa = 0.49;
+              
+              if (numParcelas === 1) {
+                     taxaPercentual = 0.0299; // 2,99% à vista
+              } else if (numParcelas >= 2 && numParcelas <= 6) {
+                     taxaPercentual = 0.0349; // 3,49% de 2 a 6 parcelas
+              } else if (numParcelas >= 7 && numParcelas <= 12) {
+                     taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
+              }
+              
+              const valorTotalComTaxa = valorBase + (valorBase * taxaPercentual) + taxaFixa;
+              return valorTotalComTaxa / numParcelas;
+       };
+
+       // Cálculo de preço atualizado (para o resumo)
        const calculatePrice = () => {
-              // Usa o valor digitado pelo usuário como base
               const valorBase = parseFloat(formData.paymentAmount) || 0;
               
               let valorTotal = valorBase;
@@ -186,455 +209,431 @@ function App() {
       alert('CPF inválido. Verifique os números digitados.');
       return false;
     }
-    
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validar formulário antes de enviar
     if (!validateForm()) {
       return;
     }
     
     setIsProcessing(true);
 
-    try {  
-      // Enviar dados para o webhook do n8n
-      const response = await fetch('https://n8n.escolaamadeus.com/webhook-test/amadeusfinanceiro', {
+    try {
+      const response = await fetch('https://flowmix.app.n8n.cloud/webhook/14c52b9c-9a62-4a0d-8c06-c8f19c30f7a3', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          studentName: formData.studentName,
-          studentGrade: formData.studentGrade,
-          studentClass: formData.studentClass,
-		  category: formData.category,
-          parentName: formData.parentName,
-          cpf: formData.cpf,
-          email: formData.email,
-          phone: formData.phone,
-		  paymentAmount: formData.paymentAmount,    // ⭐ ADICIONE
-  		  hasInterest: formData.hasInterest,
-          paymentMethod: formData.paymentMethod,
-          installments: formData.installments,
-          amount: valorTotal,
+          ...formData,
           timestamp: new Date().toISOString(),
-          event: 'Amadeus-gerarcobranca'
-        })
+        }),
       });
 
-      if (response.ok) {
-          // Pegar a resposta do n8n PRIMEIRO
-          const responseData = await response.json();
-          console.log('Resposta do n8n:', responseData); // Para debug
-          
-          // Verificar se houve erro retornado pelo n8n
-          if (responseData.success === false) {
-            alert(responseData.message || 'Erro ao processar dados. Tente novamente.');
-            return;
-          }
-          
-          // Mostrar tela de sucesso
-        setInscriptionSuccess(true);
-  
-        // Redirecionar para o Asaas após 2 segundos
-        setTimeout(() => {
-          if (responseData.paymentUrl) {
-            window.location.href = responseData.paymentUrl;
-          } else {
-            console.log('Link de pagamento não encontrado na resposta');
-            alert('Erro: Link de pagamento não encontrado. Entre em contato conosco.');
-          }
-        }, 1000);
+      const data = await response.json();
+
+      if (data.paymentUrl) {
+        window.location.href = data.paymentUrl;
       } else {
-        const errorData = await response.json();
-        alert(errorData.message || 'Erro ao enviar dados para o servidor');
+        alert('Inscrição realizada com sucesso! Aguarde instruções de pagamento.');
+        setInscriptionSuccess(true);
       }
     } catch (error) {
-      console.error('Erro:', error);
+      console.error('Erro ao enviar inscrição:', error);
       alert('Erro ao processar inscrição. Tente novamente.');
     } finally {
       setIsProcessing(false);
     }
   };
 
-  if (inscriptionSuccess) {
-    return (
-      <div className="min-h-screen bg-green-50 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 p-3 bg-green-100 rounded-full w-fit">
-              <CheckCircle className="h-8 w-8 text-green-600" />
-            </div>
-            <CardTitle className="text-green-600">Aguarde!</CardTitle>
-            <CardDescription>Redirecionando para o pagamento...</CardDescription>
-          </CardHeader>
-          <CardContent className="text-center">
-            <p className="text-sm text-muted-foreground mb-6">
-              Seus dados foram registrados com sucesso. Em instantes você será redirecionado para finalizar o pagamento.
-            </p>
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto mb-4"></div>
-            <Button onClick={() => window.location.reload()} variant="outline" className="w-full">
-              Voltar ao Início
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen smooth-scroll">
+    <div className="min-h-screen bg-background">
       {/* Header/Navigation */}
-      <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm z-50 border-b">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <h1 className="text-xl font-bold text-blue-900">Escola Amadeus</h1>
-            <div className="hidden md:flex space-x-6">
-              <button onClick={() => scrollToSection('custos')} className="text-sm hover:text-primary transition-colors">Gerar Cobrança</button>
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-2xl">🎓</span>
+              <span className="text-xl font-bold">Centro Educacional Amadeus</span>
             </div>
+            <nav className="hidden md:flex space-x-6">
+              <button onClick={() => scrollToSection('sobre')} className="hover:text-primary transition-colors">
+                Sobre
+              </button>
+              <button onClick={() => scrollToSection('informacoes')} className="hover:text-primary transition-colors">
+                Informações
+              </button>
+              <button onClick={() => scrollToSection('inscricao')} className="hover:text-primary transition-colors">
+                Inscrição
+              </button>
+              <button onClick={() => scrollToSection('contato')} className="hover:text-primary transition-colors">
+                Contato
+              </button>
+            </nav>
           </div>
-        </nav>
+        </div>
       </header>
 
       {/* Hero Section */}
-      <section className="hero-section min-h-screen flex items-center justify-center text-white relative">
-        <div className="text-center z-10 max-w-4xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-fade-in">
-           Escola Amadeus - Geração de Cobranças
-          </h1>
-        
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-           
+      <section id="sobre" className="section-padding bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 bg-blue-600 text-white px-6 py-2 text-base">
+              Pagamento
+            </Badge>
+            
+            <h1 className="text-5xl font-extrabold mb-6 text-blue-900">
+              Pagamento Administrativo
+            </h1>
+            
+            <p className="text-xl text-gray-700 mb-8 leading-relaxed">
+              Sistema de pagamento para livros, material escolar e outros serviços do Centro Educacional Amadeus.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <Button 
+                size="lg" 
+                onClick={showInscricaoForm}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-lg font-bold"
+              >
+                FAZER PAGAMENTO
+                <ArrowRight className="ml-2" />
+              </Button>
+            </div>
           </div>
-
         </div>
       </section>
 
-        
-{/* Custos e Pagamento */}
-      <section id="custos" className="section-padding bg-white">
-        <div className="container mx-auto max-w-4xl">
+      {/* Informações Gerais */}
+      <section id="informacoes" className="section-padding">
+        <div className="container mx-auto px-4 max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Material / Livros / Pagamentos</h2>
+            <h2 className="text-4xl font-bold mb-4">Informações do Pagamento</h2>
             <p className="text-lg text-muted-foreground">
-              Preencha o formulário abaixo para gerar sua cobrança
+              Detalhes sobre o processo de pagamento
             </p>
           </div>
 
-          <Card className="mb-8">
-            <CardContent className="pt-6">
-              <Separator className="my-6" />
-              
-              <div className="text-center">
-                {!showForm ? (
-                  <Button 
-                    size="lg" 
-                    className="bg-orange-600 hover:bg-orange-700 px-8 py-3"
-                    onClick={showInscricaoForm}
-                  >
-                    Gerar cobrança
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                ) : (
-                  <Button 
-                    size="lg" 
-                    variant="outline"
-                    className="px-8 py-3"
-                    onClick={() => setShowForm(false)}
-                  >
-                    <X className="mr-2 h-4 w-4" />
-                    Fechar Formulário
-                  </Button>
-                )}
-                <p className="text-xs text-muted-foreground mt-2">
-                  {!showForm ? 'Preencha seus dados e escolha a forma de pagamento' : 'Clique acima para fechar o formulário'}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-    	
-          {/* FORMULÁRIO DE INSCRIÇÃO - SHOW/HIDE */}
-          {showForm && (
-            <Card id="formulario-inscricao" className="border-orange-200 bg-orange-50/30">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Métodos de Pagamento */}
+            <Card className="card-hover">
               <CardHeader>
-                <CardTitle className="flex items-center text-orange-800">
-                  <User className="mr-2 h-5 w-5" />
-                  Gerar cobrança
-                </CardTitle>
+                <div className="flex items-center space-x-3">
+                  <CreditCard className="h-8 w-8 text-primary" />
+                  <div>
+                    <CardTitle>Métodos de Pagamento</CardTitle>
+                    <CardDescription>Opções disponíveis</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  <li className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <span>PIX (sem juros)</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <span>Cartão de Crédito (parcelamento até 12x)</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Segurança */}
+            <Card className="card-hover">
+              <CardHeader>
+                <div className="flex items-center space-x-3">
+                  <Shield className="h-8 w-8 text-primary" />
+                  <div>
+                    <CardTitle>Pagamento Seguro</CardTitle>
+                    <CardDescription>Seus dados protegidos</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Utilizamos a plataforma Asaas para processar pagamentos com total segurança e criptografia de dados.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção de Inscrição */}
+      <section id="inscricao" className="section-padding bg-muted/30">
+        <div className="container mx-auto px-4 max-w-3xl">
+          {!showForm && (
+            <div className="text-center">
+              <div className="bg-blue-600 text-white p-8 rounded-lg shadow-xl mb-8">
+                <h2 className="text-3xl font-bold mb-4">Pronto para fazer o pagamento?</h2>
+                <p className="text-lg mb-6">
+                  Clique no botão abaixo para preencher o formulário
+                </p>
+                <Button
+                  size="lg"
+                  onClick={showInscricaoForm}
+                  className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-6 text-lg font-bold"
+                >
+                  INICIAR PAGAMENTO
+                  <ArrowRight className="ml-2" />
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {showForm && !inscriptionSuccess && (
+            <Card id="formulario-inscricao" className="shadow-2xl">
+              <CardHeader>
+                <CardTitle className="text-2xl">Formulário de Pagamento</CardTitle>
                 <CardDescription>
-                  Preencha todos os dados para gerar a cobrança
+                  Preencha os dados abaixo para realizar o pagamento
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  
                   {/* Dados do Aluno */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center">
-                      <User className="mr-2 h-5 w-5" />
-                      Dados do Aluno
-                    </h3>
-                    <div className="space-y-4">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold border-b pb-2">Dados do Aluno</h3>
+                    
+                    <div>
+                      <Label htmlFor="studentName">Nome Completo do Aluno *</Label>
+                      <Input
+                        id="studentName"
+                        name="studentName"
+                        value={formData.studentName}
+                        onChange={handleInputChange}
+                        placeholder="Nome completo"
+                        required
+                        className="mt-2"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="studentName">Nome Completo do Aluno *</Label>
+                        <Label htmlFor="studentGrade">Série *</Label>
                         <Input
-                          id="studentName"
-                          name="studentName"
-                          value={formData.studentName}
+                          id="studentGrade"
+                          name="studentGrade"
+                          value={formData.studentGrade}
                           onChange={handleInputChange}
+                          placeholder="Ex: 5º ano"
                           required
-                          placeholder="Nome completo do aluno"
+                          className="mt-2"
                         />
                       </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="studentGrade">Série do Aluno *</Label>
-                          <select
-                            id="studentGrade"
-                            name="studentGrade"
-                            value={formData.studentGrade}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-                          >
-                            <option value="">Selecione a série</option>
-							<option value="Maternal II">Maternal II</option>					  
-							<option value="Maternal III">Maternal III</option>
-							<option value="Grupo 4">Grupo 4</option>
-							<option value="Grupo 5">Grupo 5</option>
-							<option value="1º Ano">1º Ano</option>
-							<option value="2º Ano">2º Ano</option>
-							<option value="3º Ano">3º Ano</option>
-                            <option value="4º Ano">4º Ano</option>
-                            <option value="5º Ano">5º Ano</option>
-                            <option value="6º Ano">6º Ano</option>
-                            <option value="7º Ano">7º Ano</option>
-                            <option value="8º Ano">8º Ano</option>
-                            <option value="9º Ano">9º Ano</option>
-                          </select>
-                        </div>
-                        <div>
-                          <Label htmlFor="studentClass">Turma do Aluno *</Label>
-                          <select
-                            id="studentClass"
-                            name="studentClass"
-                            value={formData.studentClass}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-                          >
-                            <option value="">Selecione a turma</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="C">C</option>
-                          </select>
-                        </div>                       
-                      </div>
-
-                      {/* ⭐ CAMPO DE CATEGORIA - NOVO */}
                       <div>
-                        <Label htmlFor="category">Categoria *</Label>
-                        <select
-                          id="category"
-                          name="category"
-                          value={formData.category}
+                        <Label htmlFor="studentClass">Turma *</Label>
+                        <Input
+                          id="studentClass"
+                          name="studentClass"
+                          value={formData.studentClass}
                           onChange={handleInputChange}
+                          placeholder="Ex: A"
                           required
-                          className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
-                        >
-                          <option value="">Selecione a categoria</option>
-                          <option value="Livro - Fundamental 1">Livro - Fundamental 1</option>
-						  <option value="Livro - Fundamental 2">Livro - Fundamental 2</option>
-						  <option value="Livro - Infantil">Livro - Infantil</option>
-                          <option value="material">Material</option>
-                          <option value="outros">Outros</option>
-                        </select>
+                          className="mt-2"
+                        />
                       </div>
                     </div>
                   </div>
 
                   {/* Dados do Responsável */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4 flex items-center">
-                      <Mail className="mr-2 h-5 w-5" />
-                      Dados do Responsável
-                    </h3>
-                    <div className="space-y-4">
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold border-b pb-2">Dados do Responsável</h3>
+                    
+                    <div>
+                      <Label htmlFor="parentName">Nome Completo do Responsável *</Label>
+                      <Input
+                        id="parentName"
+                        name="parentName"
+                        value={formData.parentName}
+                        onChange={handleInputChange}
+                        placeholder="Nome completo"
+                        required
+                        className="mt-2"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="cpf">
+                        CPF do Responsável *
+                        {cpfValid && <span className="ml-2 text-green-600">✓ CPF válido</span>}
+                      </Label>
+                      <Input
+                        id="cpf"
+                        name="cpf"
+                        value={formData.cpf}
+                        onChange={handleInputChange}
+                        placeholder="000.000.000-00"
+                        maxLength={14}
+                        required
+                        className={`mt-2 ${cpfError ? 'border-red-500' : cpfValid ? 'border-green-500' : ''}`}
+                      />
+                      {cpfError && (
+                        <p className="text-red-500 text-sm mt-1">{cpfError}</p>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label htmlFor="parentName">Nome do Responsável *</Label>
+                        <Label htmlFor="email">E-mail *</Label>
                         <Input
-                          id="parentName"
-                          name="parentName"
-                          value={formData.parentName}
+                          id="email"
+                          name="email"
+                          type="email"
+                          value={formData.email}
                           onChange={handleInputChange}
+                          placeholder="seu@email.com"
                           required
-                          placeholder="Nome completo do responsável"
+                          className="mt-2"
                         />
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="phone">Telefone/WhatsApp *</Label>
-                          <Input
-                            id="phone"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="(84) 99999-9999"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="email">E-mail *</Label>
-                          <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="seu@email.com"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="cpf">CPF do Responsável *</Label>
-                          <Input
-                            id="cpf"
-                            name="cpf"
-                            value={formData.cpf}
-                            onChange={handleInputChange}
-                            required
-                            placeholder="000.000.000-00"
-                            maxLength="14"
-                            className={`${
-                              formData.cpf && cpfError 
-                                ? 'border-red-500 bg-red-50' 
-                                : formData.cpf && cpfValid 
-                                ? 'border-green-500 bg-green-50' 
-                                : ''
-                            }`}
-                          />
-                          {cpfError && (
-                            <span className="text-xs text-red-600 mt-1">{cpfError}</span>
-                          )}
-                          {cpfValid && (
-                            <span className="text-xs text-green-600 mt-1 flex items-center">
-                              <Check className="h-3 w-3 mr-1" /> CPF válido
-                            </span>
-                          )}
-                        </div>
+                      <div>
+                        <Label htmlFor="phone">Telefone/WhatsApp *</Label>
+                        <Input
+                          id="phone"
+                          name="phone"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={handleInputChange}
+                          placeholder="(84) 99999-9999"
+                          required
+                          className="mt-2"
+                        />
                       </div>
                     </div>
                   </div>
 
-                  {/* ⭐ SEÇÃO DE PAGAMENTO - MODIFICADA */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Informações de Pagamento *</h3>
+                  {/* Dados do Pagamento */}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold border-b pb-2">Dados do Pagamento</h3>
                     
-                    {/* ⭐ CAMPO PARA DIGITAR O VALOR - NOVO */}
-                    <div className="mb-6">
-                      <Label htmlFor="paymentAmount">Valor do Pagamento *</Label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">R$</span>
-                        <Input
-                          id="paymentAmount"
-                          name="paymentAmount"
-                          type="number"
-                          step="0.01"
-                          min="0"
-                          value={formData.paymentAmount}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="0,00"
-                          className="pl-10"
-                        />
-                      </div>
-                      <p className="text-xs text-gray-600 mt-1">Digite o valor a ser pago</p>
+                    <div>
+                      <Label htmlFor="category">Categoria *</Label>
+                      <select
+                        id="category"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleInputChange}
+                        required
+                        className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
+                      >
+                        <option value="">Selecione a categoria</option>
+                        <option value="Livros">Livros</option>
+                        <option value="Material Escolar">Material Escolar</option>
+                        <option value="Outros">Outros</option>
+                      </select>
                     </div>
 
-                    {/* ⭐ OPÇÃO COM OU SEM JUROS - NOVO */}
-                    <div className="mb-6">
-                      <Label className="text-sm font-medium mb-3 block">Tipo de Pagamento *</Label>
-                      <div className="space-y-3">
-                        <div 
-                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                    <div>
+                      <Label htmlFor="paymentAmount">Valor do Pagamento (R$) *</Label>
+                      <Input
+                        id="paymentAmount"
+                        name="paymentAmount"
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        value={formData.paymentAmount}
+                        onChange={handleInputChange}
+                        placeholder="0.00"
+                        required
+                        className="mt-2"
+                      />
+                    </div>
+
+                    {/* CAMPO DE OBSERVAÇÕES */}
+                    <div>
+                      <Label htmlFor="observations">
+                        Observações 
+                        <span className="text-gray-400 text-sm ml-1">(opcional)</span>
+                      </Label>
+                      <textarea
+                        id="observations"
+                        name="observations"
+                        value={formData.observations}
+                        onChange={handleInputChange}
+                        placeholder="Digite aqui qualquer informação adicional que julgar necessária..."
+                        rows="4"
+                        maxLength="500"
+                        className="w-full px-3 py-2 rounded-md border border-input bg-background text-sm mt-2 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Este campo é opcional. Máximo de 500 caracteres.
+                      </p>
+                    </div>
+
+                    {/* TOGGLE COM JUROS / SEM JUROS */}
+                    <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                      <Label className="text-sm font-medium mb-3 block">
+                        Aplicar Taxas de Cartão de Crédito?
+                      </Label>
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className={`flex-1 p-3 rounded-lg border-2 cursor-pointer transition-all ${
                             formData.hasInterest === false
-                              ? 'border-green-400 bg-green-50' 
+                              ? 'border-green-500 bg-green-50'
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
                           onClick={() => setFormData(prev => ({ ...prev, hasInterest: false }))}
                         >
-                          <div className="flex items-center">
-                            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
-                              formData.hasInterest === false ? 'border-green-400 bg-green-400' : 'border-gray-300'
-                            }`}>
-                              {formData.hasInterest === false && (
-                                <div className="w-full h-full rounded-full bg-green-400"></div>
-                              )}
-                            </div>
-                            <div>
-                              <span className="font-medium">Sem Juros</span>
-                              <p className="text-xs text-gray-600">Você paga exatamente o valor digitado</p>
-                            </div>
+                          <div className="flex items-center justify-center">
+                            <span className="text-sm font-medium">Sem Juros</span>
                           </div>
                         </div>
-
-                        <div 
-                          className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        <div
+                          className={`flex-1 p-3 rounded-lg border-2 cursor-pointer transition-all ${
                             formData.hasInterest === true
-                              ? 'border-orange-400 bg-orange-50' 
+                              ? 'border-orange-500 bg-orange-50'
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
                           onClick={() => setFormData(prev => ({ ...prev, hasInterest: true }))}
                         >
-                          <div className="flex items-center">
-                            <div className={`w-4 h-4 rounded-full border-2 mr-3 flex-shrink-0 ${
-                              formData.hasInterest === true ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
-                            }`}>
-                              {formData.hasInterest === true && (
-                                <div className="w-full h-full rounded-full bg-orange-400"></div>
-                              )}
-                            </div>
-                            <div>
-                              <span className="font-medium">Com Juros</span>
-                              <p className="text-xs text-gray-600">Taxas aplicadas no cartão de crédito (2,99% a 3,99% + R$ 0,49)</p>
-                            </div>
+                          <div className="flex items-center justify-center">
+                            <span className="text-sm font-medium">Com Juros</span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500 mt-2 italic">
-                        ℹ️ Os juros são aplicados apenas em pagamentos com cartão de crédito quando "Com Juros" está selecionado
+                      <p className="text-xs text-gray-600 mt-2">
+                        {formData.hasInterest
+                          ? 'Taxas de 2,99% a 3,99% + R$ 0,49 serão aplicadas ao cartão de crédito'
+                          : 'Nenhuma taxa adicional será aplicada'}
                       </p>
                     </div>
 
                     {/* MÉTODO DE PAGAMENTO */}
-                    <div className="mb-6">
+                    <div>
                       <Label className="text-sm font-medium mb-3 block">Método de Pagamento *</Label>
                       <div className="space-y-3">
                         <div 
                           className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                             formData.paymentMethod === 'pix' 
-                              ? 'border-orange-400 bg-orange-50' 
+                              ? 'border-green-500 bg-green-50' 
                               : 'border-gray-200 hover:border-gray-300'
                           }`}
-                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1, hasInterest: false }))}
+                          onClick={() => setFormData(prev => ({ ...prev, paymentMethod: 'pix', installments: 1 }))}
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center">
                               <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
-                                formData.paymentMethod === 'pix' ? 'border-orange-400 bg-orange-400' : 'border-gray-300'
+                                formData.paymentMethod === 'pix' ? 'border-green-500 bg-green-500' : 'border-gray-300'
                               }`}>
                                 {formData.paymentMethod === 'pix' && (
-                                  <div className="w-full h-full rounded-full bg-orange-400"></div>
+                                  <div className="w-full h-full rounded-full bg-green-500"></div>
                                 )}
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <span className="text-lg font-bold">PIX</span>
-                                <span className="text-sm text-gray-600">(pagamento à vista)</span>
+                              <div>
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-sm">📱</span>
+                                  <span className="text-sm font-medium">PIX</span>
+                                </div>
+                                <div className="text-xs text-gray-600 ml-6">
+                                  (pagamento à vista)
+                                </div>
                               </div>
                             </div>
                             <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full font-medium">
@@ -682,18 +681,18 @@ function App() {
                           onChange={(e) => setFormData(prev => ({ ...prev, installments: parseInt(e.target.value) }))}
                           className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm mt-2"
                         >
-                          <option value={1}>1x de {formatCurrency(valorTotal / 1)}</option>          
-                          <option value={2}>2x de {formatCurrency(valorTotal / 2)}</option>					        
-                          <option value={3}>3x de {formatCurrency(valorTotal / 3)}</option>						        
-                          <option value={4}>4x de {formatCurrency(valorTotal / 4)}</option>					        
-                          <option value={5}>5x de {formatCurrency(valorTotal / 5)}</option>				        
-                          <option value={6}>6x de {formatCurrency(valorTotal / 6)}</option>			        
-                          <option value={7}>7x de {formatCurrency(valorTotal / 7)}</option>		        
-                          <option value={8}>8x de {formatCurrency(valorTotal / 8)}</option>	        
-                          <option value={9}>9x de {formatCurrency(valorTotal / 9)}</option>       
-                          <option value={10}>10x de {formatCurrency(valorTotal / 10)}</option>       
-                          <option value={11}>11x de {formatCurrency(valorTotal / 11)}</option>       
-                          <option value={12}>12x de {formatCurrency(valorTotal / 12)}</option>
+                          <option value={1}>1x de {formatCurrency(calculateInstallmentValue(1))}</option>
+                          <option value={2}>2x de {formatCurrency(calculateInstallmentValue(2))}</option>
+                          <option value={3}>3x de {formatCurrency(calculateInstallmentValue(3))}</option>
+                          <option value={4}>4x de {formatCurrency(calculateInstallmentValue(4))}</option>
+                          <option value={5}>5x de {formatCurrency(calculateInstallmentValue(5))}</option>
+                          <option value={6}>6x de {formatCurrency(calculateInstallmentValue(6))}</option>
+                          <option value={7}>7x de {formatCurrency(calculateInstallmentValue(7))}</option>
+                          <option value={8}>8x de {formatCurrency(calculateInstallmentValue(8))}</option>
+                          <option value={9}>9x de {formatCurrency(calculateInstallmentValue(9))}</option>
+                          <option value={10}>10x de {formatCurrency(calculateInstallmentValue(10))}</option>
+                          <option value={11}>11x de {formatCurrency(calculateInstallmentValue(11))}</option>
+                          <option value={12}>12x de {formatCurrency(calculateInstallmentValue(12))}</option>
                         </select>
                       </div>
                     )}
@@ -765,10 +764,6 @@ function App() {
         </div>
       </section>
 
-
-
-
-			
       {/* Contato */}
       <section id="contato" className="section-padding bg-muted/30">
         <div className="container mx-auto max-w-4xl">

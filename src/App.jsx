@@ -231,6 +231,7 @@ function App() {
         body: JSON.stringify({
           ...formData,
           timestamp: new Date().toISOString(),
+          event: 'Amadeus-gerarcobranca'
         }),
       });
 
@@ -837,6 +838,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

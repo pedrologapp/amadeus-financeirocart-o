@@ -29,114 +29,113 @@ import {
   UserPlus,
   Check 
 } from 'lucide-react';
-// Importando as imagens
 
 function App() {
-  // Estados para o formulário
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({
-    studentName: '',
-    studentGrade: '',
-    studentClass: '',
-	category: '',           // Categoria: livros, material ou outros
-  	paymentAmount: '',      // Valor do pagamento
-  	hasInterest: false,     // Com ou sem juros
-    parentName: '',
-    cpf: '',
-    email: '',
-    phone: '',
-    paymentMethod: 'pix',
-    installments: 1
-  });
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [inscriptionSuccess, setInscriptionSuccess] = useState(false);
-  
-  // Estados para validação de CPF
-  const [cpfError, setCpfError] = useState('');
-  const [cpfValid, setCpfValid] = useState(false);
+       // Estados para o formulário
+       const [showForm, setShowForm] = useState(false);
+       const [formData, setFormData] = useState({
+              studentName: '',
+              studentGrade: '',
+              studentClass: '',
+              category: '',           // Categoria: livros, material ou outros
+              paymentAmount: '',      // Valor do pagamento
+              hasInterest: false,     // Com ou sem juros
+              parentName: '',
+              cpf: '',
+              email: '',
+              phone: '',
+              paymentMethod: 'pix',
+              installments: 1
+       });
+       const [isProcessing, setIsProcessing] = useState(false);
+       const [inscriptionSuccess, setInscriptionSuccess] = useState(false);
+       
+       // Estados para validação de CPF
+       const [cpfError, setCpfError] = useState('');
+       const [cpfValid, setCpfValid] = useState(false);
 
-  // Função para validar CPF
-  const validarCPF = (cpf) => {
-    cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
-    
-    if (cpf.length !== 11) return false;
-    if (/^(\d)\1{10}$/.test(cpf)) return false; // CPF com todos dígitos iguais
-    
-    let soma = 0;
-    let resto;
-    
-    // Primeiro dígito verificador
-    for (let i = 1; i <= 9; i++) {
-      soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
-    }
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.substring(9, 10))) return false;
-    
-    // Segundo dígito verificador
-    soma = 0;
-    for (let i = 1; i <= 10; i++) {
-      soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
-    }
-    resto = (soma * 10) % 11;
-    if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.substring(10, 11))) return false;
-    
-    return true;
-  };
+       // Função para validar CPF
+       const validarCPF = (cpf) => {
+              cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+              
+              if (cpf.length !== 11) return false;
+              if (/^(\d)\1{10}$/.test(cpf)) return false; // CPF com todos dígitos iguais
+              
+              let soma = 0;
+              let resto;
+              
+              // Primeiro dígito verificador
+              for (let i = 1; i <= 9; i++) {
+                     soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+              }
+              resto = (soma * 10) % 11;
+              if (resto === 10 || resto === 11) resto = 0;
+              if (resto !== parseInt(cpf.substring(9, 10))) return false;
+              
+              // Segundo dígito verificador
+              soma = 0;
+              for (let i = 1; i <= 10; i++) {
+                     soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+              }
+              resto = (soma * 10) % 11;
+              if (resto === 10 || resto === 11) resto = 0;
+              if (resto !== parseInt(cpf.substring(10, 11))) return false;
+              
+              return true;
+       };
 
-  const scrollToSection = (sectionId) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-  };
+       const scrollToSection = (sectionId) => {
+              document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+       };
 
-  // Função para mostrar formulário
-  const showInscricaoForm = () => {
-    setShowForm(true);
-    setTimeout(() => {
-      document.getElementById('formulario-inscricao')?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
+       // Função para mostrar formulário
+       const showInscricaoForm = () => {
+              setShowForm(true);
+              setTimeout(() => {
+                     document.getElementById('formulario-inscricao')?.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+       };
 
-  // Função para formatar valor em Real Brasileiro
-  const formatCurrency = (value) => {
-    if (!value) return 'R$ 0,00';
-    const numValue = typeof value === 'string' ? parseFloat(value) : value;
-    if (isNaN(numValue)) return 'R$ 0,00';
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    }).format(numValue);
-  };
+       // Função para formatar valor em Real Brasileiro
+       const formatCurrency = (value) => {
+              if (!value) return 'R$ 0,00';
+              const numValue = typeof value === 'string' ? parseFloat(value) : value;
+              if (isNaN(numValue)) return 'R$ 0,00';
+              return new Intl.NumberFormat('pt-BR', {
+                     style: 'currency',
+                     currency: 'BRL'
+              }).format(numValue);
+       };
 
-  // Cálculo de preço atualizado
-  const calculatePrice = () => {
-    // Usa o valor digitado pelo usuário como base
-    const valorBase = parseFloat(formData.paymentAmount) || 0;
-    
-    let valorTotal = valorBase;
-    
-    // Aplica juros apenas se: Com Juros = true E Cartão de Crédito
-    if (formData.hasInterest === true && formData.paymentMethod === 'credit') {
-      let taxaPercentual = 0;
-      const taxaFixa = 0.49;
-      const parcelas = parseInt(formData.installments) || 1;
-      
-      if (parcelas === 1) {
-        taxaPercentual = 0.0299;
-      } else if (parcelas >= 2 && parcelas <= 4) {
-        taxaPercentual = 0.0349;
-      } else {
-        taxaPercentual = 0.0399;
-      }
-      
-      valorTotal = valorTotal + (valorTotal * taxaPercentual) + taxaFixa;
-    }
-    
-    const valorParcela = valorTotal / (parseInt(formData.installments) || 1);
-    return { valorTotal, valorParcela, valorBase };
-  };
+       // Cálculo de preço atualizado
+       const calculatePrice = () => {
+              // Usa o valor digitado pelo usuário como base
+              const valorBase = parseFloat(formData.paymentAmount) || 0;
+              
+              let valorTotal = valorBase;
+              
+              // Aplica juros apenas se: Com Juros = true E Cartão de Crédito
+              if (formData.hasInterest === true && formData.paymentMethod === 'credit') {
+                     let taxaPercentual = 0;
+                     const taxaFixa = 0.49;
+                     const parcelas = parseInt(formData.installments) || 1;
+                     
+                     if (parcelas === 1) {
+                            taxaPercentual = 0.0299; // 2,99% à vista
+                     } else if (parcelas >= 2 && parcelas <= 6) {
+                            taxaPercentual = 0.0349; // 3,49% de 2 a 6 parcelas
+                     } else if (parcelas >= 7 && parcelas <= 12) {
+                            taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
+                     }
+                     
+                     valorTotal = valorTotal + (valorTotal * taxaPercentual) + taxaFixa;
+              }
+              
+              const valorParcela = valorTotal / (parseInt(formData.installments) || 1);
+              return { valorTotal, valorParcela, valorBase };
+       };
 
-  const { valorTotal, valorParcela, valorBase } = calculatePrice();
+       const { valorTotal, valorParcela, valorBase } = calculatePrice();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -824,6 +823,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

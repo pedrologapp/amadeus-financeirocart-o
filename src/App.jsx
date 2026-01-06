@@ -108,6 +108,30 @@ function App() {
               }).format(numValue);
        };
 
+       // ============================================
+       // TAXAS DE ANTECIPAÇÃO (NOVAS)
+       // ============================================
+       // À vista: 1,15% ao mês
+       // Parcelado: 1,6% ao mês
+       const TAXA_ANTECIPACAO_VISTA = 0.0115; // 1,15%
+       const TAXA_ANTECIPACAO_PARCELADO = 0.016; // 1,6%
+
+       // Função para calcular a taxa de antecipação
+       // Fórmula: soma de (valor_parcela × taxa × meses_antecipados) para cada parcela
+       // Simplificado: valor_base × taxa × (n+1) / 2
+       const calcularTaxaAntecipacao = (valorBase, numParcelas) => {
+              if (numParcelas === 1) {
+                     // À vista: 1 mês de antecipação
+                     return valorBase * TAXA_ANTECIPACAO_VISTA * 1;
+              } else {
+                     // Parcelado: soma dos meses (1 + 2 + ... + n)
+                     // Fórmula: valor_base × taxa × (n+1) / 2
+                     const somaMeses = (numParcelas * (numParcelas + 1)) / 2;
+                     const valorParcela = valorBase / numParcelas;
+                     return valorParcela * TAXA_ANTECIPACAO_PARCELADO * somaMeses;
+              }
+       };
+
        // Função para calcular valor da parcela para um número específico de parcelas
        const calculateInstallmentValue = (numParcelas) => {
               const valorBase = parseFloat(formData.paymentAmount) || 0;
@@ -127,7 +151,11 @@ function App() {
                      taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
               }
               
-              const valorTotalComTaxa = valorBase + (valorBase * taxaPercentual) + taxaFixa;
+              // Calcula taxa de antecipação
+              const taxaAntecipacao = calcularTaxaAntecipacao(valorBase, numParcelas);
+              
+              // Valor total com todas as taxas
+              const valorTotalComTaxa = valorBase + (valorBase * taxaPercentual) + taxaFixa + taxaAntecipacao;
               return valorTotalComTaxa / numParcelas;
        };
 
@@ -136,11 +164,13 @@ function App() {
               const valorBase = parseFloat(formData.paymentAmount) || 0;
               
               let valorTotal = valorBase;
+              let taxaAntecipacao = 0;
+              let taxaCartao = 0;
+              const taxaFixa = 0.49;
               
               // Aplica juros apenas se: Com Juros = true E Cartão de Crédito
               if (formData.hasInterest === true && formData.paymentMethod === 'credit') {
                      let taxaPercentual = 0;
-                     const taxaFixa = 0.49;
                      const parcelas = parseInt(formData.installments) || 1;
                      
                      if (parcelas === 1) {
@@ -151,14 +181,21 @@ function App() {
                             taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
                      }
                      
-                     valorTotal = valorTotal + (valorTotal * taxaPercentual) + taxaFixa;
+                     // Calcula taxa do cartão
+                     taxaCartao = valorBase * taxaPercentual;
+                     
+                     // Calcula taxa de antecipação
+                     taxaAntecipacao = calcularTaxaAntecipacao(valorBase, parcelas);
+                     
+                     // Total com todas as taxas
+                     valorTotal = valorBase + taxaCartao + taxaFixa + taxaAntecipacao;
               }
               
               const valorParcela = valorTotal / (parseInt(formData.installments) || 1);
-              return { valorTotal, valorParcela, valorBase };
+              return { valorTotal, valorParcela, valorBase, taxaAntecipacao, taxaCartao };
        };
 
-       const { valorTotal, valorParcela, valorBase } = calculatePrice();
+       const { valorTotal, valorParcela, valorBase, taxaAntecipacao, taxaCartao } = calculatePrice();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -620,7 +657,7 @@ function App() {
                       </div>
                       <p className="text-xs text-gray-600 mt-2">
                         {formData.hasInterest
-                          ? 'Taxas de 2,99% a 3,99% + R$ 0,49 serão aplicadas ao cartão de crédito'
+                          ? 'Taxas de cartão (2,99% a 3,99%) + taxa fixa (R$ 0,49) + taxa de antecipação (1,15% à vista / 1,6% parcelado ao mês)'
                           : 'Nenhuma taxa adicional será aplicada'}
                       </p>
                     </div>
@@ -747,10 +784,28 @@ function App() {
                             {formData.hasInterest === false ? '✓ Sem juros' : '⚠ Com juros'}
                           </div>
                           
-                          {/* Mostrar valor adicional de juros se aplicável */}
-                          {valorTotal > valorBase && valorBase > 0 && (
-                            <div className="text-xs text-orange-700 mt-1">
-                              (+{formatCurrency(valorTotal - valorBase)} de taxas)
+                          {/* Detalhamento das taxas */}
+                          {valorTotal > valorBase && valorBase > 0 && formData.hasInterest && formData.paymentMethod === 'credit' && (
+                            <div className="mt-3 pt-3 border-t border-orange-200 text-left">
+                              <p className="text-xs font-semibold text-orange-800 mb-1">Detalhamento das taxas:</p>
+                              <div className="text-xs text-orange-700 space-y-1">
+                                <div className="flex justify-between">
+                                  <span>Taxa do cartão:</span>
+                                  <span>{formatCurrency(taxaCartao)}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Taxa fixa:</span>
+                                  <span>R$ 0,49</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span>Taxa de antecipação:</span>
+                                  <span>{formatCurrency(taxaAntecipacao)}</span>
+                                </div>
+                                <div className="flex justify-between font-semibold pt-1 border-t border-orange-300">
+                                  <span>Total de taxas:</span>
+                                  <span>{formatCurrency(valorTotal - valorBase)}</span>
+                                </div>
+                              </div>
                             </div>
                           )}
                         </div>
@@ -838,6 +893,7 @@ function App() {
 }
 
 export default App;
+
 
 
 

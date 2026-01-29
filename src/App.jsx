@@ -27,175 +27,177 @@ import {
   Plus,
   Minus,
   UserPlus,
-  Check 
+  Check,
+  Send
 } from 'lucide-react';
 
 function App() {
-       // Estados para o formulário
-       const [showForm, setShowForm] = useState(false);
-       const [formData, setFormData] = useState({
-              studentName: '',
-              studentGrade: '',
-              studentClass: '',
-              category: '',
-              paymentAmount: '',
-              hasInterest: false,
-              parentName: '',
-              cpf: '',
-              email: '',
-              phone: '',
-              paymentMethod: 'pix',
-              installments: 1,
-              observations: ''
-       });
-       const [isProcessing, setIsProcessing] = useState(false);
-       const [inscriptionSuccess, setInscriptionSuccess] = useState(false);
-       
-       // Estados para validação de CPF
-       const [cpfError, setCpfError] = useState('');
-       const [cpfValid, setCpfValid] = useState(false);
+  // Estados para o formulário
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    studentName: '',
+    studentGrade: '',
+    studentClass: '',
+    category: '',
+    paymentAmount: '',
+    hasInterest: false,
+    parentName: '',
+    cpf: '',
+    email: '',
+    phone: '',
+    paymentMethod: 'pix',
+    installments: 1,
+    observations: ''
+  });
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [inscriptionSuccess, setInscriptionSuccess] = useState(false);
+  
+  // Estados para validação de CPF
+  const [cpfError, setCpfError] = useState('');
+  const [cpfValid, setCpfValid] = useState(false);
 
-       // Função para validar CPF
-       const validarCPF = (cpf) => {
-              cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
-              
-              if (cpf.length !== 11) return false;
-              if (/^(\d)\1{10}$/.test(cpf)) return false; // CPF com todos dígitos iguais
-              
-              let soma = 0;
-              let resto;
-              
-              // Primeiro dígito verificador
-              for (let i = 1; i <= 9; i++) {
-                     soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
-              }
-              resto = (soma * 10) % 11;
-              if (resto === 10 || resto === 11) resto = 0;
-              if (resto !== parseInt(cpf.substring(9, 10))) return false;
-              
-              // Segundo dígito verificador
-              soma = 0;
-              for (let i = 1; i <= 10; i++) {
-                     soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
-              }
-              resto = (soma * 10) % 11;
-              if (resto === 10 || resto === 11) resto = 0;
-              if (resto !== parseInt(cpf.substring(10, 11))) return false;
-              
-              return true;
-       };
+  // Estados para envio de link
+  const [isSendingLink, setIsSendingLink] = useState(false);
+  const [linkSent, setLinkSent] = useState(false);
 
-       const scrollToSection = (sectionId) => {
-              document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-       };
+  // Função para validar CPF
+  const validarCPF = (cpf) => {
+    cpf = cpf.replace(/[^\d]/g, ''); // Remove caracteres não numéricos
+    
+    if (cpf.length !== 11) return false;
+    if (/^(\d)\1{10}$/.test(cpf)) return false; // CPF com todos dígitos iguais
+    
+    let soma = 0;
+    let resto;
+    
+    // Primeiro dígito verificador
+    for (let i = 1; i <= 9; i++) {
+      soma += parseInt(cpf.substring(i-1, i)) * (11 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.substring(9, 10))) return false;
+    
+    // Segundo dígito verificador
+    soma = 0;
+    for (let i = 1; i <= 10; i++) {
+      soma += parseInt(cpf.substring(i-1, i)) * (12 - i);
+    }
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) resto = 0;
+    if (resto !== parseInt(cpf.substring(10, 11))) return false;
+    
+    return true;
+  };
 
-       // Função para mostrar formulário
-       const showInscricaoForm = () => {
-              setShowForm(true);
-              setTimeout(() => {
-                     document.getElementById('formulario-inscricao')?.scrollIntoView({ behavior: 'smooth' });
-              }, 100);
-       };
+  const scrollToSection = (sectionId) => {
+    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-       // Função para formatar valor em Real Brasileiro
-       const formatCurrency = (value) => {
-              if (!value) return 'R$ 0,00';
-              const numValue = typeof value === 'string' ? parseFloat(value) : value;
-              if (isNaN(numValue)) return 'R$ 0,00';
-              return new Intl.NumberFormat('pt-BR', {
-                     style: 'currency',
-                     currency: 'BRL'
-              }).format(numValue);
-       };
+  // Função para mostrar formulário
+  const showInscricaoForm = () => {
+    setShowForm(true);
+    setTimeout(() => {
+      document.getElementById('formulario-inscricao')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
 
-       // ============================================
-       // TAXAS DE ANTECIPAÇÃO (NOVAS)
-       // ============================================
-       // À vista: 1,15% ao mês
-       // Parcelado: 1,6% ao mês
-       const TAXA_ANTECIPACAO_VISTA = 0.0115; // 1,15%
-       const TAXA_ANTECIPACAO_PARCELADO = 0.016; // 1,6%
+  // Função para formatar valor em Real Brasileiro
+  const formatCurrency = (value) => {
+    if (!value) return 'R$ 0,00';
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(numValue)) return 'R$ 0,00';
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    }).format(numValue);
+  };
 
-       // Função para calcular a taxa de antecipação
-       // Fórmula: soma de (valor_parcela × taxa × meses_antecipados) para cada parcela
-       // Simplificado: valor_base × taxa × (n+1) / 2
-       const calcularTaxaAntecipacao = (valorBase, numParcelas) => {
-              if (numParcelas === 1) {
-                     // À vista: 1 mês de antecipação
-                     return valorBase * TAXA_ANTECIPACAO_VISTA * 1;
-              } else {
-                     // Parcelado: soma dos meses (1 + 2 + ... + n)
-                     // Fórmula: valor_base × taxa × (n+1) / 2
-                     const somaMeses = (numParcelas * (numParcelas + 1)) / 2;
-                     const valorParcela = valorBase / numParcelas;
-                     return valorParcela * TAXA_ANTECIPACAO_PARCELADO * somaMeses;
-              }
-       };
+  // ============================================
+  // TAXAS DE ANTECIPAÇÃO (NOVAS)
+  // ============================================
+  // À vista: 1,15% ao mês
+  // Parcelado: 1,6% ao mês
+  const TAXA_ANTECIPACAO_VISTA = 0.0115; // 1,15%
+  const TAXA_ANTECIPACAO_PARCELADO = 0.016; // 1,6%
 
-       // Função para calcular valor da parcela para um número específico de parcelas
-       const calculateInstallmentValue = (numParcelas) => {
-              const valorBase = parseFloat(formData.paymentAmount) || 0;
-              
-              if (!formData.hasInterest || formData.paymentMethod !== 'credit') {
-                     return valorBase / numParcelas;
-              }
-              
-              let taxaPercentual = 0;
-              const taxaFixa = 0.49;
-              
-              if (numParcelas === 1) {
-                     taxaPercentual = 0.0299; // 2,99% à vista
-              } else if (numParcelas >= 2 && numParcelas <= 6) {
-                     taxaPercentual = 0.0349; // 3,49% de 2 a 6 parcelas
-              } else if (numParcelas >= 7 && numParcelas <= 12) {
-                     taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
-              }
-              
-              // Calcula taxa de antecipação
-              const taxaAntecipacao = calcularTaxaAntecipacao(valorBase, numParcelas);
-              
-              // Valor total com todas as taxas
-              const valorTotalComTaxa = valorBase + (valorBase * taxaPercentual) + taxaFixa + taxaAntecipacao;
-              return valorTotalComTaxa / numParcelas;
-       };
+  // Função para calcular a taxa de antecipação
+  const calcularTaxaAntecipacao = (valorBase, numParcelas) => {
+    if (numParcelas === 1) {
+      // À vista: 1 mês de antecipação
+      return valorBase * TAXA_ANTECIPACAO_VISTA * 1;
+    } else {
+      // Parcelado: soma dos meses (1 + 2 + ... + n)
+      const somaMeses = (numParcelas * (numParcelas + 1)) / 2;
+      const valorParcela = valorBase / numParcelas;
+      return valorParcela * TAXA_ANTECIPACAO_PARCELADO * somaMeses;
+    }
+  };
 
-       // Cálculo de preço atualizado (para o resumo)
-       const calculatePrice = () => {
-              const valorBase = parseFloat(formData.paymentAmount) || 0;
-              
-              let valorTotal = valorBase;
-              let taxaAntecipacao = 0;
-              let taxaCartao = 0;
-              const taxaFixa = 0.49;
-              
-              // Aplica juros apenas se: Com Juros = true E Cartão de Crédito
-              if (formData.hasInterest === true && formData.paymentMethod === 'credit') {
-                     let taxaPercentual = 0;
-                     const parcelas = parseInt(formData.installments) || 1;
-                     
-                     if (parcelas === 1) {
-                            taxaPercentual = 0.0299; // 2,99% à vista
-                     } else if (parcelas >= 2 && parcelas <= 6) {
-                            taxaPercentual = 0.0349; // 3,49% de 2 a 6 parcelas
-                     } else if (parcelas >= 7 && parcelas <= 12) {
-                            taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
-                     }
-                     
-                     // Calcula taxa do cartão
-                     taxaCartao = valorBase * taxaPercentual;
-                     
-                     // Calcula taxa de antecipação
-                     taxaAntecipacao = calcularTaxaAntecipacao(valorBase, parcelas);
-                     
-                     // Total com todas as taxas
-                     valorTotal = valorBase + taxaCartao + taxaFixa + taxaAntecipacao;
-              }
-              
-              const valorParcela = valorTotal / (parseInt(formData.installments) || 1);
-              return { valorTotal, valorParcela, valorBase, taxaAntecipacao, taxaCartao };
-       };
+  // Função para calcular valor da parcela para um número específico de parcelas
+  const calculateInstallmentValue = (numParcelas) => {
+    const valorBase = parseFloat(formData.paymentAmount) || 0;
+    
+    if (!formData.hasInterest || formData.paymentMethod !== 'credit') {
+      return valorBase / numParcelas;
+    }
+    
+    let taxaPercentual = 0;
+    const taxaFixa = 0.49;
+    
+    if (numParcelas === 1) {
+      taxaPercentual = 0.0299; // 2,99% à vista
+    } else if (numParcelas >= 2 && numParcelas <= 6) {
+      taxaPercentual = 0.0349; // 3,49% de 2 a 6 parcelas
+    } else if (numParcelas >= 7 && numParcelas <= 12) {
+      taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
+    }
+    
+    // Calcula taxa de antecipação
+    const taxaAntecipacao = calcularTaxaAntecipacao(valorBase, numParcelas);
+    
+    // Valor total com todas as taxas
+    const valorTotalComTaxa = valorBase + (valorBase * taxaPercentual) + taxaFixa + taxaAntecipacao;
+    return valorTotalComTaxa / numParcelas;
+  };
 
-       const { valorTotal, valorParcela, valorBase, taxaAntecipacao, taxaCartao } = calculatePrice();
+  // Cálculo de preço atualizado (para o resumo)
+  const calculatePrice = () => {
+    const valorBase = parseFloat(formData.paymentAmount) || 0;
+    
+    let valorTotal = valorBase;
+    let taxaAntecipacao = 0;
+    let taxaCartao = 0;
+    const taxaFixa = 0.49;
+    
+    // Aplica juros apenas se: Com Juros = true E Cartão de Crédito
+    if (formData.hasInterest === true && formData.paymentMethod === 'credit') {
+      let taxaPercentual = 0;
+      const parcelas = parseInt(formData.installments) || 1;
+      
+      if (parcelas === 1) {
+        taxaPercentual = 0.0299; // 2,99% à vista
+      } else if (parcelas >= 2 && parcelas <= 6) {
+        taxaPercentual = 0.0349; // 3,49% de 2 a 6 parcelas
+      } else if (parcelas >= 7 && parcelas <= 12) {
+        taxaPercentual = 0.0399; // 3,99% de 7 a 12 parcelas
+      }
+      
+      // Calcula taxa do cartão
+      taxaCartao = valorBase * taxaPercentual;
+      
+      // Calcula taxa de antecipação
+      taxaAntecipacao = calcularTaxaAntecipacao(valorBase, parcelas);
+      
+      // Total com todas as taxas
+      valorTotal = valorBase + taxaCartao + taxaFixa + taxaAntecipacao;
+    }
+    
+    const valorParcela = valorTotal / (parseInt(formData.installments) || 1);
+    return { valorTotal, valorParcela, valorBase, taxaAntecipacao, taxaCartao };
+  };
+
+  const { valorTotal, valorParcela, valorBase, taxaAntecipacao, taxaCartao } = calculatePrice();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -250,6 +252,36 @@ function App() {
     return true;
   };
 
+  // Função para enviar dados (usada por ambos os botões)
+  const enviarDados = async (enviarLinkCelular = false) => {
+    if (!validateForm()) {
+      return false;
+    }
+
+    try {
+      const response = await fetch('https://webhook.escolaamadeus.com/webhook/amadeuseventos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          valorTotal: valorTotal,
+          valorParcela: valorParcela,
+          enviarLinkCelular: enviarLinkCelular, // <-- Campo que indica se deve enviar link por celular
+          timestamp: new Date().toISOString(),
+          event: 'Amadeus-gerarcobranca'
+        }),
+      });
+
+      const data = await response.json();
+      return { success: true, data };
+    } catch (error) {
+      console.error('Erro ao enviar:', error);
+      return { success: false, error };
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -260,31 +292,52 @@ function App() {
     setIsProcessing(true);
 
     try {
-      const response = await fetch('https://webhook.escolaamadeus.com/webhook/amadeuseventos', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          timestamp: new Date().toISOString(),
-          event: 'Amadeus-gerarcobranca'
-        }),
-      });
+      const result = await enviarDados(false); // enviarLinkCelular = false
 
-      const data = await response.json();
-
-      if (data.paymentUrl) {
-        window.location.href = data.paymentUrl;
-      } else {
+      if (result.success && result.data.paymentUrl) {
+        window.location.href = result.data.paymentUrl;
+      } else if (result.success) {
         alert('Inscrição realizada com sucesso! Aguarde instruções de pagamento.');
         setInscriptionSuccess(true);
+      } else {
+        alert('Erro ao processar inscrição. Tente novamente.');
       }
     } catch (error) {
       console.error('Erro ao enviar inscrição:', error);
       alert('Erro ao processar inscrição. Tente novamente.');
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  // Função para enviar link de pagamento para o cliente
+  const handleSendPaymentLink = async () => {
+    if (!validateForm()) {
+      return;
+    }
+
+    // Verifica se tem telefone preenchido
+    if (!formData.phone) {
+      alert('Por favor, preencha o telefone/WhatsApp do cliente para enviar o link.');
+      return;
+    }
+    
+    setIsSendingLink(true);
+
+    try {
+      const result = await enviarDados(true); // enviarLinkCelular = true
+
+      if (result.success) {
+        setLinkSent(true);
+        alert('Link de pagamento será enviado para o WhatsApp do cliente!');
+      } else {
+        alert('Erro ao enviar link. Tente novamente.');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar link:', error);
+      alert('Erro ao enviar link. Tente novamente.');
+    } finally {
+      setIsSendingLink(false);
     }
   };
 
@@ -813,24 +866,67 @@ function App() {
                     )}
                   </div>
 
-                  {/* Botão de Envio */}
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-orange-600 hover:bg-orange-700 text-white py-6 text-lg font-bold"
-                    disabled={isProcessing}
-                  >
-                    {isProcessing ? (
-                      <>
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                        Processando Inscrição...
-                      </>
-                    ) : (
-                      'CONTINUAR PARA PAGAMENTO'
-                    )}
-                  </Button>
+                  {/* Botões de Ação */}
+                  <div className="space-y-3">
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-orange-600 hover:bg-orange-700 text-white py-6 text-lg font-bold"
+                      disabled={isProcessing || isSendingLink}
+                    >
+                      {isProcessing ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Processando...
+                        </>
+                      ) : (
+                        'CONTINUAR PARA PAGAMENTO'
+                      )}
+                    </Button>
 
-                  <p className="text-xs text-center text-gray-600">
-                    Ao finalizar, você será redirecionado para o pagamento via Asaas
+                    {/* Divisor */}
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-gray-300" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-white px-2 text-gray-500">ou</span>
+                      </div>
+                    </div>
+
+                    {/* Botão de enviar link para o cliente */}
+                    <Button 
+                      type="button"
+                      onClick={handleSendPaymentLink}
+                      className="w-full bg-green-600 hover:bg-green-700 text-white py-5 text-md font-semibold"
+                      disabled={isProcessing || isSendingLink || linkSent}
+                    >
+                      {isSendingLink ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Enviando Link...
+                        </>
+                      ) : linkSent ? (
+                        <>
+                          <Check className="mr-2 h-5 w-5" />
+                          Link Enviado!
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2 h-5 w-5" />
+                          ENVIAR LINK DE PAGAMENTO PARA O CLIENTE
+                        </>
+                      )}
+                    </Button>
+
+                    {linkSent && (
+                      <p className="text-sm text-center text-green-600 font-medium">
+                        ✓ Link de pagamento será enviado para {formData.phone}
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-center text-gray-600 mt-4">
+                    Ao finalizar, o pagamento será processado via Asaas
                   </p>
                 </form>
               </CardContent>
@@ -881,10 +977,10 @@ function App() {
       <footer className="bg-blue-900 text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm">
-            © 2025 Escola Centro Educacional Amadeus. Todos os direitos reservados.
+            © 2026 Escola Centro Educacional Amadeus. Todos os direitos reservados.
           </p>
           <p className="text-xs mt-2 opacity-80">
-            Passeio ao Game Station no Partage Shopping - 15 de Agosto de 2025
+            Amadeus cobrança
           </p>
         </div>
       </footer>
@@ -893,7 +989,6 @@ function App() {
 }
 
 export default App;
-
 
 
 
